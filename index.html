@@ -1,0 +1,4164 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SISPENA — Staf Perencanaan Kesdam I/BB</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --army-dark: #1a3d1f;
+            --army-green: #1a3d1f;
+            --army-mid: #2d5a35;
+            --army-accent: #4a8c55;
+            --army-light: #2d5a35;
+            --gold: #c9a84c;
+            --gold-light: #e8c97a;
+            --cream: #1a1a1a;
+            --paper: #ffffff;
+            --text-dark: #1a1a1a;
+            --text-mid: #333333;
+            --border: #c8d8c9;
+            --red-status: #c0392b;
+            --blue-status: #2471a3;
+            --green-status: #1e8449;
+            --bg-page: #f0f4f0;
+            --bg-card: #ffffff;
+            --bg-table: #ffffff;
+            --text-main: #1a1a1a;
+            --text-sub: #444;
+            --row-odd: #f4f8f4;
+            --row-hover: #e8f2e8;
+            --header-text: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-page);
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        /* ─── PATTERN OVERLAY ─── */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+                repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255, 255, 255, 0.012) 20px, rgba(255, 255, 255, 0.012) 21px),
+                repeating-linear-gradient(-45deg, transparent, transparent 20px, rgba(255, 255, 255, 0.012) 20px, rgba(255, 255, 255, 0.012) 21px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ─── HEADER ─── */
+        header {
+            position: relative;
+            z-index: 10;
+            background: linear-gradient(135deg, var(--army-green) 0%, #142718 50%, var(--army-dark) 100%);
+            border-bottom: 3px solid var(--gold);
+            padding: 0 2rem;
+        }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 1.2rem 0;
+            border-bottom: 1px solid rgba(201, 168, 76, 0.25);
+        }
+
+        .logo-emblem {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.5), 0 4px 20px rgba(0, 0, 0, 0.5);
+            flex-shrink: 0;
+        }
+
+        .logo-side {
+            width: 68px;
+            height: 68px;
+            object-fit: contain;
+            flex-shrink: 0;
+            filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.4));
+        }
+
+        .header-title h1 {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.7rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            color: var(--gold-light);
+            line-height: 1;
+            text-transform: uppercase;
+        }
+
+        .header-title p {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.82rem;
+            color: rgba(255, 255, 255, 0.75);
+            letter-spacing: 0.5px;
+            margin-top: 4px;
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        .header-badge {
+            margin-left: auto;
+            text-align: right;
+        }
+
+        .header-badge .badge-label {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.65rem;
+            letter-spacing: 3px;
+            color: rgba(255, 255, 255, 0.55);
+            text-transform: uppercase;
+        }
+
+        .header-badge .badge-unit {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--gold);
+            letter-spacing: 2px;
+        }
+
+        .header-nav {
+            display: flex;
+            gap: 0;
+        }
+
+        .nav-tab {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            background: transparent;
+            color: rgba(245, 240, 232, 0.55);
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -3px;
+            transition: all 0.2s;
+        }
+
+        .nav-tab:hover {
+            color: var(--cream);
+        }
+
+        .nav-tab.active {
+            color: var(--gold-light);
+            border-bottom-color: var(--gold);
+        }
+
+        /* ─── MAIN LAYOUT ─── */
+        main {
+            position: relative;
+            z-index: 5;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* ─── STATS BAR ─── */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid #c8d8c9;
+            border-left: 4px solid var(--army-green);
+            padding: 1rem 1.2rem;
+            border-radius: 4px;
+            animation: fadeSlide 0.5s ease forwards;
+            opacity: 0;
+            transform: translateY(10px);
+            box-shadow: 0 2px 8px rgba(26, 61, 31, 0.08);
+        }
+
+        .stat-card:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .stat-card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .stat-card:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .stat-card:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+
+        .stat-card:nth-child(5) {
+            animation-delay: 0.5s;
+        }
+
+        @keyframes fadeSlide {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .stat-number {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--army-green);
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.78rem;
+            color: #555;
+            margin-top: 4px;
+            letter-spacing: 1px;
+            font-style: italic;
+        }
+
+        /* ─── TOOLBAR ─── */
+        .toolbar {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .search-wrap {
+            flex: 1;
+            min-width: 260px;
+            position: relative;
+        }
+
+        .search-wrap input {
+            width: 100%;
+            background: #ffffff;
+            border: 1px solid #b8cdb8;
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.92rem;
+            padding: 0.7rem 1rem 0.7rem 2.8rem;
+            border-radius: 4px;
+            outline: none;
+            transition: border-color 0.2s;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.06);
+        }
+
+        .search-wrap input:focus {
+            border-color: var(--army-green);
+            box-shadow: 0 0 0 3px rgba(26, 61, 31, 0.1);
+        }
+
+        .search-wrap input::placeholder {
+            color: #aaa;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 0.9rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--army-light);
+            font-size: 0.9rem;
+        }
+
+        .filter-select {
+            background: #ffffff;
+            border: 1px solid #b8cdb8;
+            color: var(--text-main);
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            padding: 0.7rem 1rem;
+            border-radius: 4px;
+            outline: none;
+            cursor: pointer;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.06);
+        }
+
+        .btn {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 0.7rem 1.4rem;
+            border-radius: 2px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--gold), #a87d30);
+            color: var(--army-dark);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--gold-light), var(--gold));
+            transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(201, 168, 76, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid rgba(26, 61, 31, 0.35);
+            color: var(--army-green);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(26, 61, 31, 0.08);
+        }
+
+        /* ─── TABLE ─── */
+        .table-wrap {
+            background: var(--bg-card);
+            border: 1px solid #c8d8c9;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(26, 61, 31, 0.08);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead tr {
+            background: linear-gradient(90deg, #1a3d1f, #2d5a35);
+            border-bottom: 2px solid #c9a84c;
+        }
+
+        thead th {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--gold-light);
+            padding: 1rem 1.2rem;
+            text-align: left;
+            white-space: nowrap;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid #e0ebe0;
+            transition: background 0.15s;
+            animation: rowIn 0.4s ease forwards;
+            opacity: 0;
+        }
+
+        @keyframes rowIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        tbody tr:hover {
+            background: #e8f2e8;
+        }
+
+        tbody tr:nth-child(odd) {
+            background: #f4f8f4;
+        }
+
+        tbody tr:nth-child(odd):hover {
+            background: #ddf0dd;
+        }
+
+        tbody td {
+            padding: 0.9rem 1.1rem;
+            font-size: 0.92rem;
+            vertical-align: middle;
+            color: var(--text-main);
+            line-height: 1.5;
+        }
+
+        .td-number {
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--army-green);
+            width: 60px;
+        }
+
+        .td-name {
+            color: var(--text-main);
+            font-weight: 400;
+            min-width: 200px;
+        }
+
+        .td-date {
+            font-family: 'Rajdhani', sans-serif;
+            color: var(--army-green);
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            white-space: nowrap;
+        }
+
+        /* ─── DOCUMENT BADGES ─── */
+        .doc-cell {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            min-width: 320px;
+        }
+
+        .doc-badge {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 3px 10px;
+            border-radius: 2px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid;
+            white-space: nowrap;
+        }
+
+        .doc-badge.doc-surat {
+            background: rgba(36, 113, 163, 0.15);
+            border-color: rgba(36, 113, 163, 0.5);
+            color: #7ab8e0;
+        }
+
+        .doc-badge.doc-surat:hover {
+            background: rgba(36, 113, 163, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .doc-badge.doc-laporan {
+            background: rgba(30, 132, 73, 0.15);
+            border-color: rgba(30, 132, 73, 0.5);
+            color: #7adc9a;
+        }
+
+        .doc-badge.doc-laporan:hover {
+            background: rgba(30, 132, 73, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .doc-badge.doc-notulen {
+            background: rgba(201, 168, 76, 0.12);
+            border-color: rgba(201, 168, 76, 0.4);
+            color: var(--gold-light);
+        }
+
+        .doc-badge.doc-notulen:hover {
+            background: rgba(201, 168, 76, 0.25);
+            transform: translateY(-1px);
+        }
+
+        .doc-badge.doc-wabku {
+            background: rgba(142, 68, 173, 0.12);
+            border-color: rgba(142, 68, 173, 0.45);
+            color: #c39bd3;
+        }
+
+        .doc-badge.doc-wabku:hover {
+            background: rgba(142, 68, 173, 0.25);
+            transform: translateY(-1px);
+        }
+
+        .doc-badge.empty {
+            background: rgba(0, 0, 0, 0.04);
+            border-color: rgba(0, 0, 0, 0.15);
+            color: rgba(0, 0, 0, 0.35);
+            cursor: pointer;
+        }
+
+        .doc-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+
+        /* ─── ACTION BUTTONS ─── */
+        .action-cell {
+            display: flex;
+            gap: 6px;
+        }
+
+        .btn-action {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            padding: 4px 10px;
+            border-radius: 2px;
+            border: 1px solid;
+            cursor: pointer;
+            transition: all 0.15s;
+            background: transparent;
+        }
+
+        .btn-edit {
+            color: var(--gold-light);
+            border-color: rgba(201, 168, 76, 0.4);
+        }
+
+        .btn-edit:hover {
+            background: rgba(201, 168, 76, 0.15);
+        }
+
+        .btn-del {
+            color: #e07070;
+            border-color: rgba(192, 57, 43, 0.4);
+        }
+
+        .btn-del:hover {
+            background: rgba(192, 57, 43, 0.15);
+        }
+
+        /* ─── MODAL ─── */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .modal {
+            background: #ffffff;
+            border: 1px solid #c8d8c9;
+            border-top: 4px solid var(--army-green);
+            border-radius: 4px;
+            width: 640px;
+            max-width: 95vw;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.25);
+            animation: modalIn 0.3s ease;
+        }
+
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: scale(0.96) translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.2rem 1.8rem;
+            border-bottom: 1px solid #d4e4d4;
+            background: linear-gradient(90deg, #1a3d1f, #2d5a35);
+        }
+
+        .modal-header h2 {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            color: #ffffff;
+            text-transform: uppercase;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.4rem;
+            cursor: pointer;
+            line-height: 1;
+            padding: 2px 6px;
+            transition: color 0.15s;
+        }
+
+        .modal-close:hover {
+            color: #fff;
+        }
+
+        .modal-body {
+            padding: 1.8rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.4rem;
+        }
+
+        .form-label {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--army-green);
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .form-input,
+        .form-select {
+            width: 100%;
+            background: #f8fbf8;
+            border: 1px solid #b8cdb8;
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.92rem;
+            padding: 0.75rem 1rem;
+            border-radius: 4px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-input:focus,
+        .form-select:focus {
+            border-color: var(--army-green);
+            box-shadow: 0 0 0 3px rgba(26, 61, 31, 0.1);
+        }
+
+        .form-divider {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            color: var(--army-green);
+            text-transform: uppercase;
+            margin: 1.8rem 0 1.2rem;
+            padding-bottom: 6px;
+            border-bottom: 2px solid #c8d8c9;
+        }
+
+        .doc-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .btn-upload-inline {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 0.45rem 0.85rem;
+            background: linear-gradient(135deg, var(--army-green), var(--army-mid));
+            color: #fff;
+            border: 1px solid var(--army-accent);
+            border-radius: 4px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            cursor: pointer;
+            white-space: nowrap;
+            flex-shrink: 0;
+            transition: all 0.2s;
+            align-self: center;
+        }
+
+        .btn-upload-inline:hover {
+            background: linear-gradient(135deg, var(--army-mid), var(--army-accent));
+            box-shadow: 0 2px 8px rgba(26, 61, 31, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .inline-file-preview {
+            display: none;
+            margin-top: 6px;
+            padding: 5px 10px;
+            background: rgba(26, 61, 31, 0.07);
+            border: 1px solid #c8d8c9;
+            border-radius: 4px;
+            font-size: 0.78rem;
+            color: var(--army-green);
+            font-family: 'Inter', sans-serif;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .inline-file-preview.visible {
+            display: flex;
+        }
+
+        .inline-file-preview .fp-name {
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-weight: 500;
+        }
+
+        .inline-file-preview .fp-remove {
+            background: none;
+            border: none;
+            color: #c0392b;
+            cursor: pointer;
+            font-size: 0.9rem;
+            padding: 0 2px;
+            line-height: 1;
+            flex-shrink: 0;
+        }
+
+        .doc-row-label {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.72rem;
+            letter-spacing: 1.5px;
+            color: var(--army-light);
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .doc-row-label::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 1px;
+            flex-shrink: 0;
+        }
+
+        .doc-row-label.surat::before {
+            background: #7ab8e0;
+        }
+
+        .doc-row-label.laporan::before {
+            background: #7adc9a;
+        }
+
+        .doc-row-label.notulen::before {
+            background: var(--gold-light);
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.8rem;
+            padding: 1.2rem 1.8rem;
+            border-top: 1px solid #d4e4d4;
+            background: #f4f8f4;
+        }
+
+        /* ─── DETAIL MODAL ─── */
+        .detail-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .detail-section-title {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.7rem;
+            letter-spacing: 3px;
+            color: var(--army-green);
+            text-transform: uppercase;
+            margin-bottom: 0.8rem;
+            padding-bottom: 4px;
+            border-bottom: 2px solid #c8d8c9;
+        }
+
+        .detail-doc-card {
+            background: #f4f8f4;
+            border: 1px solid #c8d8c9;
+            border-left: 3px solid var(--army-green);
+            border-radius: 4px;
+            padding: 1rem;
+            margin-bottom: 0.6rem;
+        }
+
+        .detail-doc-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        .detail-doc-name {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .detail-doc-meta {
+            font-size: 0.8rem;
+            color: #777;
+            font-style: italic;
+        }
+
+        /* ─── EMPTY STATE ─── */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #aaa;
+        }
+
+        .empty-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.4;
+        }
+
+        .empty-text {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* ─── TOAST ─── */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--army-green);
+            border-left: 4px solid var(--gold);
+            color: #fff;
+            padding: 1rem 1.4rem;
+            border-radius: 4px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            z-index: 200;
+            transform: translateX(120%);
+            transition: transform 0.3s;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        /* ─── PAGINATION ─── */
+        .pagination {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.2rem;
+            border-top: 1px solid #d4e4d4;
+            background: #f8fbf8;
+        }
+
+        .page-info {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.78rem;
+            letter-spacing: 1.5px;
+            color: #555;
+        }
+
+        .page-buttons {
+            display: flex;
+            gap: 4px;
+        }
+
+        .page-btn {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 4px 10px;
+            background: #fff;
+            border: 1px solid #b8cdb8;
+            color: var(--army-green);
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.15s;
+        }
+
+        .page-btn:hover,
+        .page-btn.active {
+            background: var(--army-green);
+            color: #fff;
+            border-color: var(--army-green);
+        }
+
+        @media (max-width: 900px) {
+            .stats-bar {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .doc-cell {
+                min-width: 220px;
+            }
+
+            .doc-row {
+                grid-template-columns: 1fr;
+            }
+
+            .header-badge {
+                display: none;
+            }
+        }
+
+        /* ─── DASHBOARD KELENGKAPAN ─── */
+        .dashboard-section {
+            margin-bottom: 2rem;
+        }
+
+        .dashboard-title {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--army-green);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dashboard-title::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(201, 168, 76, 0.2);
+        }
+
+        .progress-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+        }
+
+        .progress-card {
+            background: #ffffff;
+            border: 1px solid #c8d8c9;
+            border-radius: 6px;
+            padding: 1.1rem 1.3rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(26, 61, 31, 0.07);
+        }
+
+        .progress-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--track-color, var(--gold));
+        }
+
+        .progress-card.doc-rencana {
+            --track-color: #7ab8e0;
+        }
+
+        .progress-card.doc-laporan-card {
+            --track-color: #7adc9a;
+        }
+
+        .progress-card.doc-produk {
+            --track-color: var(--gold-light);
+        }
+
+        .progress-card.doc-wabku {
+            --track-color: #c39bd3;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.8rem;
+        }
+
+        .progress-doc-name {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .progress-card.doc-rencana .progress-doc-name {
+            color: #7ab8e0;
+        }
+
+        .progress-card.doc-laporan-card .progress-doc-name {
+            color: #7adc9a;
+        }
+
+        .progress-card.doc-produk .progress-doc-name {
+            color: var(--gold-light);
+        }
+
+        .progress-pct {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--army-green);
+            line-height: 1;
+        }
+
+        .progress-count {
+            font-size: 0.72rem;
+            color: #777;
+            font-style: italic;
+            margin-top: 3px;
+        }
+
+        .progress-bar-wrap {
+            background: #e8f0e8;
+            border-radius: 2px;
+            height: 8px;
+            overflow: hidden;
+            margin-top: 0.6rem;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 2px;
+            transition: width 1s ease;
+        }
+
+        .progress-card.doc-rencana .progress-bar-fill {
+            background: linear-gradient(90deg, #4a8fc4, #7ab8e0);
+        }
+
+        .progress-card.doc-laporan-card .progress-bar-fill {
+            background: linear-gradient(90deg, #2d9a55, #7adc9a);
+        }
+
+        .progress-card.doc-produk .progress-bar-fill {
+            background: linear-gradient(90deg, var(--gold), var(--gold-light));
+        }
+
+        .progress-card.doc-wabku .progress-doc-name {
+            color: #c39bd3;
+        }
+
+        .progress-card.doc-wabku .progress-bar-fill {
+            background: linear-gradient(90deg, #8e44ad, #c39bd3);
+        }
+
+        /* ─── RENCANA PENARIKAN DANA COLUMNS ─── */
+        .th-group {
+            text-align: center !important;
+            font-size: 0.7rem !important;
+        }
+
+        .tw-badge {
+            display: inline-block;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            padding: 2px 8px;
+            border-radius: 2px;
+            white-space: nowrap;
+        }
+
+        .tw-i {
+            background: rgba(36, 113, 163, 0.2);
+            color: #7ab8e0;
+            border: 1px solid rgba(36, 113, 163, 0.4);
+        }
+
+        .tw-ii {
+            background: rgba(46, 204, 113, 0.15);
+            color: #7adc9a;
+            border: 1px solid rgba(46, 204, 113, 0.35);
+        }
+
+        .tw-iii {
+            background: rgba(201, 168, 76, 0.15);
+            color: var(--gold-light);
+            border: 1px solid rgba(201, 168, 76, 0.3);
+        }
+
+        .tw-iv {
+            background: rgba(192, 57, 43, 0.15);
+            color: #e07070;
+            border: 1px solid rgba(192, 57, 43, 0.35);
+        }
+
+        .sumber-badge {
+            display: inline-block;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            padding: 3px 8px;
+            border-radius: 2px;
+            white-space: nowrap;
+        }
+
+        .sumber-rupiah {
+            background: rgba(30, 132, 73, 0.2);
+            color: #5ddb8a;
+            border: 1px solid rgba(30, 132, 73, 0.4);
+        }
+
+        .sumber-pnbp {
+            background: rgba(201, 168, 76, 0.2);
+            color: var(--gold-light);
+            border: 1px solid rgba(201, 168, 76, 0.4);
+        }
+
+        .sumber-hibah {
+            background: rgba(142, 68, 173, 0.2);
+            color: #c39bd3;
+            border: 1px solid rgba(142, 68, 173, 0.4);
+        }
+
+        .sumber-phln {
+            background: rgba(36, 113, 163, 0.2);
+            color: #7ab8e0;
+            border: 1px solid rgba(36, 113, 163, 0.4);
+        }
+
+        @media (max-width: 1200px) {
+            .progress-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .progress-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+
+        /* ─── FILE UPLOAD DOKUMEN ─── */
+        .doc-badge.has-file {
+            cursor: pointer;
+            position: relative;
+        }
+
+        .doc-badge.has-file:hover {
+            opacity: 0.85;
+        }
+
+        .upload-modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 150;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(3px);
+        }
+
+        .upload-modal-overlay.open {
+            display: flex;
+        }
+
+        .upload-modal {
+            background: #fff;
+            border: 1px solid #c8d8c9;
+            border-top: 4px solid var(--army-green);
+            border-radius: 6px;
+            width: 520px;
+            max-width: 96vw;
+            max-height: 88vh;
+            overflow-y: auto;
+            box-shadow: 0 16px 60px rgba(0, 0, 0, 0.2);
+            animation: modalIn 0.25s ease;
+        }
+
+        .upload-modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.5rem;
+            background: linear-gradient(90deg, #1a3d1f, #2d5a35);
+            border-bottom: 1px solid #c8d8c9;
+        }
+
+        .upload-modal-header h3 {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: #fff;
+            text-transform: uppercase;
+        }
+
+        .upload-modal-body {
+            padding: 1.5rem;
+        }
+
+        .upload-doc-section {
+            margin-bottom: 1.5rem;
+            padding: 1.2rem;
+            background: #f4f8f4;
+            border: 1px solid #c8d8c9;
+            border-left: 4px solid;
+            border-radius: 4px;
+        }
+
+        .upload-doc-section.type-rencana {
+            border-left-color: #7ab8e0;
+        }
+
+        .upload-doc-section.type-laporan {
+            border-left-color: #7adc9a;
+        }
+
+        .upload-doc-section.type-produk {
+            border-left-color: var(--gold);
+        }
+
+        .upload-doc-section.type-wabku {
+            border-left-color: #c39bd3;
+        }
+
+        .upload-doc-title {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 0.8rem;
+        }
+
+        .type-rencana .upload-doc-title {
+            color: #2471a3;
+        }
+
+        .type-laporan .upload-doc-title {
+            color: #1e8449;
+        }
+
+        .type-produk .upload-doc-title {
+            color: #a07820;
+        }
+
+        .type-wabku .upload-doc-title {
+            color: #8e44ad;
+        }
+
+        .file-drop-zone {
+            border: 2px dashed #b8cdb8;
+            border-radius: 4px;
+            padding: 1.2rem;
+            text-align: center;
+            background: #fff;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .file-drop-zone:hover,
+        .file-drop-zone.drag-over {
+            border-color: var(--army-green);
+            background: #edf5ed;
+        }
+
+        .file-drop-zone input[type="file"] {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+        }
+
+        .file-drop-icon {
+            font-size: 1.8rem;
+            margin-bottom: 4px;
+        }
+
+        .file-drop-text {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            color: #666;
+        }
+
+        .file-drop-hint {
+            font-size: 0.7rem;
+            color: #aaa;
+            margin-top: 2px;
+        }
+
+        .file-preview {
+            display: none;
+            align-items: center;
+            gap: 10px;
+            background: #edf5ed;
+            border: 1px solid #b8d8b8;
+            border-radius: 4px;
+            padding: 0.7rem 1rem;
+            margin-top: 0.6rem;
+        }
+
+        .file-preview.show {
+            display: flex;
+        }
+
+        .file-preview-name {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.82rem;
+            color: var(--army-green);
+            font-weight: 600;
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .btn-file-remove {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            padding: 3px 8px;
+            background: transparent;
+            border: 1px solid rgba(192, 57, 43, 0.4);
+            color: #c0392b;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: all 0.15s;
+            flex-shrink: 0;
+        }
+
+        .btn-file-remove:hover {
+            background: rgba(192, 57, 43, 0.1);
+        }
+
+        .btn-file-replace {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            padding: 3px 8px;
+            background: transparent;
+            border: 1px solid rgba(26, 61, 31, 0.4);
+            color: var(--army-green);
+            border-radius: 3px;
+            cursor: pointer;
+            transition: all 0.15s;
+            flex-shrink: 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-file-replace:hover {
+            background: rgba(26, 61, 31, 0.08);
+        }
+
+        .btn-file-replace input[type="file"] {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+        }
+
+        .file-status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 4px;
+        }
+
+        .file-status-dot.uploaded {
+            background: #27ae60;
+        }
+
+        .file-status-dot.empty {
+            background: #ccc;
+        }
+
+        .upload-modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.8rem;
+            padding: 1rem 1.5rem;
+            border-top: 1px solid #d4e4d4;
+            background: #f4f8f4;
+        }
+
+        .file-preview {
+            display: none;
+            align-items: center;
+            gap: 6px;
+            margin-top: 8px;
+            padding: 6px 10px;
+            background: rgba(26,61,31,0.06);
+            border: 1px solid #c8d8c9;
+            border-radius: 4px;
+            font-size: 0.82rem;
+            font-family: 'Inter', sans-serif;
+            color: var(--army-green);
+        }
+
+        .file-preview.show {
+            display: flex;
+        }
+
+        .file-preview-name {
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-weight: 500;
+        }
+
+        .btn-file-replace {
+            position: relative;
+            overflow: hidden;
+            background: transparent;
+            border: 1px solid rgba(26,61,31,0.3);
+            color: var(--army-green);
+            border-radius: 3px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            padding: 3px 8px;
+            cursor: pointer;
+            white-space: nowrap;
+            flex-shrink: 0;
+            transition: background 0.15s;
+        }
+
+        .btn-file-replace:hover {
+            background: rgba(26,61,31,0.1);
+        }
+
+        .btn-file-replace input[type="file"] {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+            font-size: 0;
+        }
+
+        .btn-file-remove {
+            background: transparent;
+            border: 1px solid rgba(192,57,43,0.35);
+            color: #c0392b;
+            border-radius: 3px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            padding: 3px 8px;
+            cursor: pointer;
+            white-space: nowrap;
+            flex-shrink: 0;
+            transition: background 0.15s;
+        }
+
+        .btn-file-remove:hover {
+            background: rgba(192,57,43,0.1);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header>
+        <div class="header-top">
+            <img class="logo-emblem" src="https://upload.wikimedia.org/wikipedia/commons/7/76/Logo_Kementerian_Pertahanan_Republik_Indonesia_%282022%29.png" alt="Logo Kemhan">
+            <img class="logo-emblem" src="https://upload.wikimedia.org/wikipedia/commons/6/65/Lambang_Kodam_Bukit_Barisan.png" alt="Lambang Kodam Bukit Barisan">
+            <div class="header-title">
+                <h1>SISPENA</h1>
+                <p>Sistem Informasi Penyimpanan Dokumen — Staf Perencanaan Kesdam I/Bukit Barisan</p>
+            </div>
+            <div class="header-badge">
+                <div class="badge-label">Satuan</div>
+                <div class="badge-unit">KESDAM I/BB</div>
+            </div>
+        </div>
+        <div class="header-nav">
+            <button class="nav-tab active" onclick="switchTab('beranda', this)">▪ Beranda</button>
+            <button class="nav-tab" style="color: #e07070;" onclick="doLogout()">▪ Log Out</button>
+        </div>
+    </header>
+
+    <!-- MAIN -->
+    <main>
+
+        <!-- STATS -->
+        <div class="stats-bar">
+            <div class="stat-card">
+                <div class="stat-number" id="stat-total">0</div>
+                <div class="stat-label">Total Kegiatan</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="stat-surat">0</div>
+                <div class="stat-label">Rencana Kegiatan</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="stat-laporan">0</div>
+                <div class="stat-label">Laporan Kegiatan</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="stat-notulen">0</div>
+                <div class="stat-label">Produk Kegiatan</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="stat-laporan-wabku">0</div>
+                <div class="stat-label">Laporan WABKU</div>
+            </div>
+        </div>
+
+
+        <!-- DASHBOARD KELENGKAPAN DOKUMEN -->
+        <div class="dashboard-section">
+            <div class="dashboard-title">📊 Dashboard Kelengkapan Upload Dokumen</div>
+            <div class="progress-grid">
+                <div class="progress-card doc-rencana">
+                    <div class="progress-header">
+                        <div>
+                            <div class="progress-doc-name">Rencana Kegiatan</div>
+                            <div class="progress-count" id="dash-rencana-count">0 dari 0 kegiatan</div>
+                        </div>
+                        <div class="progress-pct" id="dash-rencana-pct">0%</div>
+                    </div>
+                    <div class="progress-bar-wrap">
+                        <div class="progress-bar-fill" id="dash-rencana-bar" style="width:0%"></div>
+                    </div>
+                </div>
+                <div class="progress-card doc-laporan-card">
+                    <div class="progress-header">
+                        <div>
+                            <div class="progress-doc-name">Laporan Kegiatan</div>
+                            <div class="progress-count" id="dash-laporan-count">0 dari 0 kegiatan</div>
+                        </div>
+                        <div class="progress-pct" id="dash-laporan-pct">0%</div>
+                    </div>
+                    <div class="progress-bar-wrap">
+                        <div class="progress-bar-fill" id="dash-laporan-bar" style="width:0%"></div>
+                    </div>
+                </div>
+                <div class="progress-card doc-produk">
+                    <div class="progress-header">
+                        <div>
+                            <div class="progress-doc-name">Produk Kegiatan</div>
+                            <div class="progress-count" id="dash-produk-count">0 dari 0 kegiatan</div>
+                        </div>
+                        <div class="progress-pct" id="dash-produk-pct">0%</div>
+                    </div>
+                    <div class="progress-bar-wrap">
+                        <div class="progress-bar-fill" id="dash-produk-bar" style="width:0%"></div>
+                    </div>
+                </div>
+                <div class="progress-card doc-wabku">
+                    <div class="progress-header">
+                        <div>
+                            <div class="progress-doc-name">Laporan WABKU</div>
+                            <div class="progress-count" id="dash-wabku-count">0 dari 0 kegiatan</div>
+                        </div>
+                        <div class="progress-pct" id="dash-wabku-pct">0%</div>
+                    </div>
+                    <div class="progress-bar-wrap">
+                        <div class="progress-bar-fill" id="dash-wabku-bar" style="width:0%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TOOLBAR -->
+        <div class="toolbar">
+            <div class="search-wrap">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="searchInput" placeholder="Cari nama kegiatan, nomor, atau tanggal…" oninput="_resetPageAndRender()">
+            </div>
+            <select class="filter-select" id="filterDoc" onchange="_resetPageAndRender()">
+                <option value="">Semua Dokumen</option>
+                <option value="surat">Rencana Kegiatan</option>
+                <option value="laporan">Laporan Kegiatan</option>
+                <option value="notulen">Produk Kegiatan</option>
+                <option value="wabku">Laporan Wabku</option>
+            </select>
+            <select class="filter-select" id="filterPagu" onchange="_resetPageAndRender()">
+                <option value="">Semua Pagu</option>
+                <option value="kecil">≤ 5 Juta</option>
+                <option value="sedang">5–15 Juta</option>
+                <option value="besar">&gt; 15 Juta</option>
+            </select>
+            <button class="btn btn-primary" onclick="openModal()">＋ Tambah Kegiatan</button>
+            <button class="btn btn-secondary" onclick="exportData()">⬇ Ekspor</button>
+            <button class="btn btn-secondary" onclick="doSyncAll()" id="btn-sync-all" title="Sinkronkan semua data ke Google Sheets">☁️ Sinkron Sheets</button>
+        </div>
+        <!-- GS SYNC STATUS BAR -->
+        <div id="gs-status-bar" style="display:flex;align-items:center;gap:0.8rem;margin-bottom:1rem;padding:0.55rem 1rem;background:#ffffff;border:1px solid #c8d8c9;border-radius:4px;font-size:0.82rem;font-family:'Rajdhani',sans-serif;letter-spacing:1px;">
+            <span style="color:#555;">STATUS GOOGLE SHEETS:</span>
+            <span id="gs-sync-status" style="color:#c9a84c;font-weight:600;transition:opacity 1s;">—</span>
+            <span style="margin-left:auto;color:#aaa;font-size:0.72rem;" id="gs-url-indicator"></span>
+        </div>
+
+        <!-- TABLE -->
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th rowspan="2">No.</th>
+                        <th rowspan="2">Nama Kegiatan</th>
+                        <th rowspan="2">Pagu Anggaran</th>
+                        <th colspan="4" class="th-group" style="text-align:center;border-bottom:1px solid rgba(201,168,76,0.25)">Rencana Penarikan Dana</th>
+                        <th rowspan="2">Sumber<br>Anggaran</th>
+                        <th rowspan="2">Dokumen Tersimpan</th>
+                        <th rowspan="2">Aksi</th>
+                    </tr>
+                    <tr style="background:linear-gradient(90deg,#1a3d1f,#1e4526);border-bottom:1px solid rgba(201,168,76,0.3)">
+                        <th style="font-size:0.7rem;letter-spacing:1px;color:#7ab8e0;padding:0.5rem 1.2rem">TW I</th>
+                        <th style="font-size:0.7rem;letter-spacing:1px;color:#7adc9a;padding:0.5rem 1.2rem">TW II</th>
+                        <th style="font-size:0.7rem;letter-spacing:1px;color:var(--gold-light);padding:0.5rem 1.2rem">TW III</th>
+                        <th style="font-size:0.7rem;letter-spacing:1px;color:#e07070;padding:0.5rem 1.2rem">TW IV</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <tr>
+                        <td colspan="9">
+                            <div class="empty-state">
+                                <div class="empty-icon">📂</div>
+                                <div class="empty-text">Belum ada data kegiatan</div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="pagination">
+                <div class="page-info" id="pageInfo">Menampilkan 0 data</div>
+                <div class="page-buttons" id="pageButtons"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- ADD/EDIT MODAL -->
+    <div class="modal-overlay" id="formModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="modalTitle">Tambah Kegiatan</h2>
+                <button class="modal-close" onclick="closeModal()">✕</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="editId">
+                <div class="form-group">
+                    <label class="form-label">Nama Kegiatan</label>
+                    <input class="form-input" id="f-nama" type="text" placeholder="Masukkan nama kegiatan…">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Pagu Anggaran (Rp)</label>
+                    <input class="form-input" id="f-pagu" type="number" min="0" placeholder="Contoh: 7800000">
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+                    <div class="form-group">
+                        <label class="form-label">Rencana Penarikan Dana</label>
+                        <div style="display:flex;gap:10px;flex-wrap:wrap;padding:0.6rem 0">
+                            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-family:Rajdhani,sans-serif;font-size:0.82rem;color:#7ab8e0">
+                                <input type="checkbox" id="f-tw-TW-I" style="accent-color:#7ab8e0"> TW I
+                            </label>
+                            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-family:Rajdhani,sans-serif;font-size:0.82rem;color:#7adc9a">
+                                <input type="checkbox" id="f-tw-TW-II" style="accent-color:#7adc9a"> TW II
+                            </label>
+                            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-family:Rajdhani,sans-serif;font-size:0.82rem;color:var(--gold-light)">
+                                <input type="checkbox" id="f-tw-TW-III" style="accent-color:#c9a84c"> TW III
+                            </label>
+                            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-family:Rajdhani,sans-serif;font-size:0.82rem;color:#e07070">
+                                <input type="checkbox" id="f-tw-TW-IV" style="accent-color:#e07070"> TW IV
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Sumber Anggaran</label>
+                        <select class="form-select" id="f-sumber">
+                            <option value="Rupiah Murni">Rupiah Murni</option>
+                            <option value="PNBP">PNBP</option>
+                            <option value="Hibah">Hibah</option>
+                            <option value="PHLN">PHLN</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-divider">📄 Dokumen Kegiatan</div>
+
+                <!-- DOC 1: RENCANA KEGIATAN -->
+                <div style="margin-bottom:1.2rem">
+                    <div class="doc-row-label surat">Rencana Kegiatan</div>
+                    <div class="doc-row">
+                        <div>
+                            <div style="font-size:0.72rem;color:rgba(122,184,127,0.6);margin-bottom:4px">Nama Surat</div>
+                            <div style="display:flex;gap:6px;align-items:center">
+                                <input class="form-input" id="f-surat-nomor" type="text" placeholder="Nama surat kegiatan…" style="flex:1;min-width:0">
+                                <label class="btn-upload-inline" title="Upload file surat">
+                                    <input type="file" id="f-surat-file" accept=".pdf,.doc,.docx,.jpg,.png" style="display:none" onchange="handleInlineFile('surat', this)">
+                                    📎 Upload
+                                </label>
+                            </div>
+                            <div class="inline-file-preview" id="prev-inline-surat"></div>
+                        </div>
+                        <div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DOC 2:LAPORAN KEGIATAN -->
+                <div style="margin-bottom:1.2rem">
+                    <div class="doc-row-label laporan">Laporan Kegiatan</div>
+                    <div class="doc-row">
+                        <div>
+                            <div style="font-size:0.72rem;color:rgba(122,184,127,0.6);margin-bottom:4px">Nama Laporan</div>
+                            <div style="display:flex;gap:6px;align-items:center">
+                                <input class="form-input" id="f-laporan-nomor" type="text" placeholder="Nama laporan kegiatan…" style="flex:1;min-width:0">
+                                <label class="btn-upload-inline" title="Upload file surat">
+                                    <input type="file" id="f-laporan-file" accept=".pdf,.doc,.docx,.jpg,.png" style="display:none" onchange="handleInlineFile('laporan', this)">
+                                    📎 Upload
+                                </label>
+                            </div>
+                            <div class="inline-file-preview" id="prev-inline-laporan"></div>
+                        </div>
+                        <div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DOC 3:PRODUK KEGIATAN -->
+                <div style="margin-bottom:1.2rem">
+                    <div class="doc-row-label notulen">Produk Kegiatan</div>
+                    <div class="doc-row">
+                        <div>
+                            <div style="font-size:0.72rem;color:rgba(122,184,127,0.6);margin-bottom:4px">Nama Produk</div>
+                            <div style="display:flex;gap:6px;align-items:center">
+                                <input class="form-input" id="f-notulen-nomor" type="text" placeholder="Nama Produk kegiatan…" style="flex:1;min-width:0">
+                                <label class="btn-upload-inline" title="Upload file surat">
+                                    <input type="file" id="f-produk-file" accept=".pdf,.doc,.docx,.jpg,.png" style="display:none" onchange="handleInlineFile('produk', this)">
+                                    📎 Upload
+                                </label>
+                            </div>
+                            <div class="inline-file-preview" id="prev-inline-produk"></div>
+                        </div>
+                        <div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DOC 4:LAPORAN PERTANGGUNGJAWABAN KEUANGAN (WABKU) -->
+                <div style="margin-bottom:1.2rem">
+                    <div class="doc-row-label laporan">Laporan Pertanggungjawaban Keuangan (Wabku)</div>
+                    <div class="doc-row">
+                        <div>
+                            <div style="font-size:0.72rem;color:rgba(122,184,127,0.6);margin-bottom:4px">Nama Laporan Wabku</div>
+                            <div style="display:flex;gap:6px;align-items:center">
+                                <input class="form-input" id="f-wabku-nomor" type="text" placeholder="Nama laporan wabku…" style="flex:1;min-width:0">
+                                <label class="btn-upload-inline" title="Upload file surat">
+                                    <input type="file" id="f-wabku-file" accept=".pdf,.doc,.docx,.jpg,.png" style="display:none" onchange="handleInlineFile('wabku', this)">
+                                    📎 Upload
+                                </label>
+                            </div>
+                            <div class="inline-file-preview" id="prev-inline-wabku"></div>
+                        </div>
+                        <div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal()">Batal</button>
+                <button class="btn btn-primary" onclick="saveEntry()">💾 Simpan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- DETAIL MODAL -->
+    <div class="modal-overlay" id="detailModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Detail Kegiatan</h2>
+                <button class="modal-close" onclick="closeDetail()">✕</button>
+            </div>
+            <div class="modal-body" id="detailBody"></div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeDetail()">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        /* ─── LOGIN PAGE ─── */
+        #loginPage {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: linear-gradient(135deg, #0d2410 0%, #1a3d1f 55%, #142718 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Inter', sans-serif;
+        }
+
+        #loginPage::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                repeating-linear-gradient(45deg, transparent, transparent 40px, rgba(201, 168, 76, 0.03) 40px, rgba(201, 168, 76, 0.03) 41px),
+                repeating-linear-gradient(-45deg, transparent, transparent 40px, rgba(201, 168, 76, 0.03) 40px, rgba(201, 168, 76, 0.03) 41px);
+            pointer-events: none;
+        }
+
+        /* decorative corner stars */
+        #loginPage::after {
+            content: '✦';
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            font-size: 1.2rem;
+            color: rgba(201, 168, 76, 0.12);
+            pointer-events: none;
+        }
+
+        .login-card {
+            position: relative;
+            background: rgba(10, 30, 12, 0.75);
+            border: 1px solid rgba(201, 168, 76, 0.22);
+            border-top: 3px solid #c9a84c;
+            border-radius: 10px;
+            padding: 2.6rem 2.4rem 2rem;
+            width: 430px;
+            max-width: 95vw;
+            box-shadow: 0 24px 64px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(201, 168, 76, 0.08);
+            backdrop-filter: blur(12px);
+            animation: loginFadeIn 0.5s ease forwards;
+        }
+
+        @keyframes loginFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(28px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ── Header branding ── */
+        .login-logo-wrap {
+            text-align: center;
+            margin-bottom: 1.6rem;
+        }
+
+        .login-badge-icon {
+            font-size: 3rem;
+            display: block;
+            margin-bottom: 0.6rem;
+            filter: drop-shadow(0 2px 8px rgba(201, 168, 76, 0.3));
+        }
+
+        .login-logo-wrap h1 {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            letter-spacing: 4px;
+            color: #e8c97a;
+            text-transform: uppercase;
+            line-height: 1;
+            margin-bottom: 6px;
+        }
+
+        .login-logo-wrap .login-subtitle {
+            font-size: 0.72rem;
+            color: rgba(255, 255, 255, 0.4);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            font-family: 'Rajdhani', sans-serif;
+        }
+
+        .login-divider {
+            border: none;
+            border-top: 1px solid rgba(201, 168, 76, 0.15);
+            margin: 1.4rem 0 1.6rem;
+        }
+
+        /* ── Form fields ── */
+        .login-field {
+            margin-bottom: 1.1rem;
+        }
+
+        .login-field label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: rgba(201, 168, 76, 0.65);
+            margin-bottom: 7px;
+        }
+
+        .login-field label .lbl-icon {
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+
+        .login-input-wrap {
+            position: relative;
+        }
+
+        .login-field input[type="text"],
+        .login-field input[type="password"] {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(201, 168, 76, 0.18);
+            border-radius: 5px;
+            color: #f0ece0;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            padding: 0.75rem 2.8rem 0.75rem 1rem;
+            outline: none;
+            transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+            box-sizing: border-box;
+        }
+
+        .login-field input::placeholder {
+            color: rgba(255, 255, 255, 0.2);
+        }
+
+        .login-field input:focus {
+            border-color: rgba(201, 168, 76, 0.55);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.1);
+        }
+
+        /* show/hide password toggle */
+        .toggle-pw {
+            position: absolute;
+            right: 0.8rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 1rem;
+            line-height: 1;
+            padding: 2px;
+            transition: color 0.2s;
+            user-select: none;
+        }
+
+        .toggle-pw:hover {
+            color: rgba(201, 168, 76, 0.7);
+        }
+
+        /* ── Error / success alerts ── */
+        .login-alert {
+            display: none;
+            border-radius: 5px;
+            font-size: 0.82rem;
+            padding: 0.6rem 0.9rem;
+            margin-bottom: 1.1rem;
+            text-align: center;
+            gap: 6px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-alert.show {
+            display: flex;
+        }
+
+        .login-alert.alert-error {
+            background: rgba(192, 57, 43, 0.15);
+            border: 1px solid rgba(192, 57, 43, 0.4);
+            color: #f1948a;
+        }
+
+        .login-alert.alert-info {
+            background: rgba(36, 113, 163, 0.15);
+            border: 1px solid rgba(36, 113, 163, 0.4);
+            color: #7ab8e0;
+        }
+
+        .login-alert.alert-success {
+            background: rgba(30, 132, 73, 0.15);
+            border: 1px solid rgba(30, 132, 73, 0.4);
+            color: #7adc9a;
+        }
+
+        /* ── Remember me + forgot password row ── */
+        .login-options {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.3rem;
+            margin-top: 0.2rem;
+        }
+
+        .remember-wrap {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        /* custom checkbox */
+        .remember-wrap input[type="checkbox"] {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            border: 1px solid rgba(201, 168, 76, 0.35);
+            border-radius: 3px;
+            background: rgba(255, 255, 255, 0.05);
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .remember-wrap input[type="checkbox"]:checked {
+            background: #c9a84c;
+            border-color: #c9a84c;
+        }
+
+        .remember-wrap input[type="checkbox"]:checked::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #1a3d1f;
+            font-size: 0.65rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .remember-wrap span {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.45);
+        }
+
+        .forgot-link {
+            font-size: 0.8rem;
+            color: rgba(201, 168, 76, 0.6);
+            cursor: pointer;
+            text-decoration: none;
+            transition: color 0.2s;
+            background: none;
+            border: none;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .forgot-link:hover {
+            color: #e8c97a;
+            text-decoration: underline;
+        }
+
+        /* ── Login button ── */
+        .btn-login {
+            width: 100%;
+            background: linear-gradient(135deg, #c9a84c, #a87d30);
+            color: #1a3d1f;
+            border: none;
+            border-radius: 5px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.92rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            padding: 0.88rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-login:hover {
+            background: linear-gradient(135deg, #e8c97a, #c9a84c);
+            box-shadow: 0 4px 24px rgba(201, 168, 76, 0.35);
+            transform: translateY(-1px);
+        }
+
+        .btn-login:active {
+            transform: translateY(0);
+        }
+
+        .btn-login.loading {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* ── Footer ── */
+        .login-card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 1.6rem;
+            padding-top: 1.2rem;
+            border-top: 1px solid rgba(201, 168, 76, 0.1);
+        }
+
+        .login-card-footer span {
+            font-size: 0.68rem;
+            color: rgba(255, 255, 255, 0.2);
+            letter-spacing: 1.5px;
+            font-family: 'Rajdhani', sans-serif;
+            text-transform: uppercase;
+        }
+
+        .login-card-footer .dot {
+            width: 3px;
+            height: 3px;
+            border-radius: 50%;
+            background: rgba(201, 168, 76, 0.25);
+            flex-shrink: 0;
+        }
+
+        /* ── Forgot password modal ── */
+        .forgot-modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 10000;
+            background: rgba(0, 0, 0, 0.7);
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+        }
+
+        .forgot-modal-overlay.open {
+            display: flex;
+        }
+
+        .forgot-modal {
+            background: #0f2612;
+            border: 1px solid rgba(201, 168, 76, 0.25);
+            border-top: 3px solid #c9a84c;
+            border-radius: 8px;
+            padding: 2rem;
+            width: 380px;
+            max-width: 94vw;
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.7);
+            animation: loginFadeIn 0.3s ease;
+        }
+
+        .forgot-modal h3 {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: #e8c97a;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .forgot-modal p {
+            font-size: 0.82rem;
+            color: rgba(255, 255, 255, 0.45);
+            margin-bottom: 1.2rem;
+            line-height: 1.5;
+        }
+
+        .forgot-modal .login-field input {
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .forgot-modal-actions {
+            display: flex;
+            gap: 0.6rem;
+            justify-content: flex-end;
+            margin-top: 1.2rem;
+        }
+
+        .btn-forgot-cancel {
+            background: transparent;
+            border: 1px solid rgba(201, 168, 76, 0.3);
+            color: rgba(201, 168, 76, 0.7);
+            border-radius: 4px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 0.6rem 1.2rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-forgot-cancel:hover {
+            background: rgba(201, 168, 76, 0.08);
+        }
+
+        .btn-forgot-submit {
+            background: linear-gradient(135deg, #c9a84c, #a87d30);
+            color: #1a3d1f;
+            border: none;
+            border-radius: 4px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 0.6rem 1.2rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-forgot-submit:hover {
+            background: linear-gradient(135deg, #e8c97a, #c9a84c);
+        }
+
+        /* fade-out animation when login success */
+        #loginPage.fade-out {
+            animation: loginFadeOut 0.5s ease forwards;
+        }
+
+        @keyframes loginFadeOut {
+            from {
+                opacity: 1;
+            }
+
+            to {
+                opacity: 0;
+                pointer-events: none;
+            }
+        }
+    </style>
+
+    <!-- ═══════════════════════════════════ -->
+    <!-- LOGIN PAGE                         -->
+    <!-- ═══════════════════════════════════ -->
+    <div id="loginPage">
+        <div class="login-card">
+
+            <!-- Branding -->
+            <div class="login-logo-wrap">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/7/76/Logo_Kementerian_Pertahanan_Republik_Indonesia_%282022%29.png" alt="Logo" style="width:100px;"> <span><img src="https://upload.wikimedia.org/wikipedia/commons/6/65/Lambang_Kodam_Bukit_Barisan.png" alt="Logo" style="width:98px;"></span>
+                <h1>SISPENA</h1>
+                <div class="login-subtitle">Staf Perencanaan &nbsp;·&nbsp; Kesdam I/BB</div>
+            </div>
+
+            <hr class="login-divider">
+
+            <!-- Alert box -->
+            <div class="login-alert alert-error" id="loginError">⚠ Username atau password salah</div>
+            <div class="login-alert alert-info" id="loginInfo"></div>
+            <div class="login-alert alert-success" id="loginSuccess"></div>
+
+            <!-- Username -->
+            <div class="login-field">
+                <label><span class="lbl-icon">👤</span> Username</label>
+                <div class="login-input-wrap">
+                    <input type="text" id="loginUsername" placeholder="Masukkan username" autocomplete="username">
+                </div>
+            </div>
+
+            <!-- Password -->
+            <div class="login-field">
+                <label><span class="lbl-icon">🔑</span> Password</label>
+                <div class="login-input-wrap">
+                    <input type="password" id="loginPassword" placeholder="Masukkan password" autocomplete="current-password">
+                    <button class="toggle-pw" id="togglePw" type="button" title="Tampilkan / sembunyikan password">👁</button>
+                </div>
+            </div>
+
+            <!-- Remember me + Forgot password -->
+            <div class="login-options">
+                <label class="remember-wrap">
+                    <input type="checkbox" id="rememberMe">
+                    <span>Ingat saya</span>
+                </label>
+                <button class="forgot-link" onclick="openForgotModal()">Lupa password?</button>
+            </div>
+
+            <!-- Submit -->
+            <button class="btn-login" id="btnLogin" onclick="doLogin()">
+                <span id="btnLoginIcon">🔐</span>
+                <span id="btnLoginText">Masuk</span>
+            </button>
+
+            <!-- Footer -->
+            <div class="login-card-footer">
+                <span>Copyright</span>
+                <div class="dot"></div>
+                <span>Yulia Sartika</span>
+                <div class="dot"></div>
+                <span>NIP 199707012025062001</span>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════ -->
+    <!-- FORGOT PASSWORD MODAL              -->
+    <!-- ═══════════════════════════════════ -->
+    <div class="forgot-modal-overlay" id="forgotModal">
+        <div class="forgot-modal">
+            <h3>🔒 Lupa Password</h3>
+            <p>Masukkan username Anda. Jika terdaftar, administrator akan mengatur ulang password Anda.</p>
+            <div class="login-alert alert-info" id="forgotInfo" style="margin-bottom:1rem"></div>
+            <div class="login-field">
+                <label>Username</label>
+                <div class="login-input-wrap">
+                    <input type="text" id="forgotUsername" placeholder="Masukkan username Anda">
+                </div>
+            </div>
+            <div class="forgot-modal-actions">
+                <button class="btn-forgot-cancel" onclick="closeForgotModal()">Batal</button>
+                <button class="btn-forgot-submit" onclick="submitForgot()">Kirim Permintaan</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ── Remember me: restore saved username ──
+        const _savedUser = localStorage.getItem('sispena_remember_user');
+        if (_savedUser) {
+            document.getElementById('loginUsername').value = _savedUser;
+            document.getElementById('rememberMe').checked = true;
+        }
+
+        // ── Auto-login if session still active ──
+        if (sessionStorage.getItem('sispena_auth') === 'true' ||
+            localStorage.getItem('sispena_remember_auth') === 'true') {
+            document.getElementById('loginPage').style.display = 'none';
+        }
+
+        // ── Enter key navigation ──
+        document.getElementById('loginUsername').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') document.getElementById('loginPassword').focus();
+        });
+        document.getElementById('loginPassword').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') doLogin();
+        });
+
+        // ── Show / hide password ──
+        document.getElementById('togglePw').addEventListener('click', function() {
+            const inp = document.getElementById('loginPassword');
+            const isHidden = inp.type === 'password';
+            inp.type = isHidden ? 'text' : 'password';
+            this.textContent = isHidden ? '🙈' : '👁';
+        });
+
+        // ── Helper: show alert ──
+        function showLoginAlert(id, msg) {
+            ['loginError', 'loginInfo', 'loginSuccess'].forEach(i => {
+                const el = document.getElementById(i);
+                el.classList.remove('show');
+                el.textContent = '';
+            });
+            if (id && msg) {
+                const el = document.getElementById(id);
+                el.textContent = msg;
+                el.classList.add('show');
+            }
+        }
+
+        // ── Main login logic (Google Sheets Auth) ──
+        async function doLogin() {
+            const user = document.getElementById('loginUsername').value.trim();
+            const pass = document.getElementById('loginPassword').value;
+            const remember = document.getElementById('rememberMe').checked;
+            const btn = document.getElementById('btnLogin');
+            const btnText = document.getElementById('btnLoginText');
+
+            if (!user) {
+                showLoginAlert('loginError', '⚠ Username tidak boleh kosong');
+                return;
+            }
+            if (!pass) {
+                showLoginAlert('loginError', '⚠ Password tidak boleh kosong');
+                return;
+            }
+
+            showLoginAlert(null);
+            btn.classList.add('loading');
+            btnText.textContent = 'Memverifikasi…';
+
+            // ── Jika Apps Script belum dikonfigurasi, fallback ke mode offline ──
+            if (!GS_ENABLED) {
+                setTimeout(() => {
+                    showLoginAlert('loginError', '⚠ Apps Script belum dikonfigurasi. Hubungi Administrator.');
+                    btn.classList.remove('loading');
+                    btnText.textContent = 'Masuk';
+                }, 700);
+                return;
+            }
+
+            try {
+                const url = `${GOOGLE_SHEET_URL}?action=login&username=${encodeURIComponent(user)}&password=${encodeURIComponent(pass)}`;
+                const res  = await fetch(url);
+                const json = await res.json();
+
+                if (json.success) {
+                    // Simpan info user ke session
+                    const userData = JSON.stringify(json.user);
+                    sessionStorage.setItem('sispena_auth', 'true');
+                    sessionStorage.setItem('sispena_user', userData);
+
+                    if (remember) {
+                        localStorage.setItem('sispena_remember_user', user);
+                        localStorage.setItem('sispena_remember_auth', 'true');
+                        localStorage.setItem('sispena_user', userData);
+                    } else {
+                        localStorage.removeItem('sispena_remember_user');
+                        localStorage.removeItem('sispena_remember_auth');
+                        localStorage.removeItem('sispena_user');
+                    }
+
+                    // Tampilkan nama pengguna jika ada elemen profil
+                    if (json.user) {
+                        sessionStorage.setItem('sispena_nama',    json.user.nama    || '');
+                        sessionStorage.setItem('sispena_jabatan', json.user.jabatan || '');
+                    }
+
+                    showLoginAlert('loginSuccess', '✔ Login berhasil! Mengalihkan…');
+                    btn.classList.remove('loading');
+                    btnText.textContent = 'Berhasil';
+
+                    setTimeout(() => {
+                        const page = document.getElementById('loginPage');
+                        page.classList.add('fade-out');
+                        setTimeout(() => {
+                            page.style.display = 'none';
+                            // Update nama & jabatan di header jika ada
+                            _updateUserDisplay();
+                        }, 500);
+                    }, 700);
+                } else {
+                    showLoginAlert('loginError', '⚠ ' + (json.message || 'Username atau password salah'));
+                    btn.classList.remove('loading');
+                    btnText.textContent = 'Masuk';
+                    document.getElementById('loginPassword').value = '';
+                    document.getElementById('loginPassword').focus();
+                }
+            } catch (err) {
+                showLoginAlert('loginError', '⚠ Gagal terhubung ke server. Periksa koneksi internet.');
+                btn.classList.remove('loading');
+                btnText.textContent = 'Masuk';
+                console.error('[Login Error]', err);
+            }
+        }
+
+        // ── Tampilkan nama & jabatan di elemen header jika ada ──
+        function _updateUserDisplay() {
+            const nama    = sessionStorage.getItem('sispena_nama')    || '';
+            const jabatan = sessionStorage.getItem('sispena_jabatan') || '';
+            const elNama    = document.getElementById('displayNama');
+            const elJabatan = document.getElementById('displayJabatan');
+            if (elNama)    elNama.textContent    = nama;
+            if (elJabatan) elJabatan.textContent = jabatan;
+        }
+
+        // Panggil saat halaman load (jika session masih aktif)
+        _updateUserDisplay();
+
+        // ── Forgot password modal ──
+        function openForgotModal() {
+            document.getElementById('forgotUsername').value = document.getElementById('loginUsername').value;
+            document.getElementById('forgotInfo').classList.remove('show');
+            document.getElementById('forgotModal').classList.add('open');
+        }
+
+        function closeForgotModal() {
+            document.getElementById('forgotModal').classList.remove('open');
+        }
+
+        function submitForgot() {
+            const u = document.getElementById('forgotUsername').value.trim();
+            const info = document.getElementById('forgotInfo');
+            if (!u) {
+                info.textContent = '⚠ Masukkan username terlebih dahulu';
+                info.className = 'login-alert alert-error show';
+                return;
+            }
+            // Simulate request (in real app: send to backend)
+            info.textContent = '✔ Permintaan dikirim. Hubungi administrator untuk reset password.';
+            info.className = 'login-alert alert-success show';
+            setTimeout(() => closeForgotModal(), 2500);
+        }
+    // ── Fungsi Log Out ──
+        function doLogout() {
+            if (!confirm("Apakah Anda yakin ingin keluar?")) return;
+            sessionStorage.removeItem('sispena_auth');
+            localStorage.removeItem('sispena_remember_auth');
+
+            // Tampilkan kembali halaman login
+            const page = document.getElementById('loginPage');
+            page.style.display = 'flex';
+            page.classList.remove('fade-out');
+            document.getElementById('loginPassword').value = '';
+            showLoginAlert(null);
+        }
+    </script>
+
+
+
+    <script>
+    // ═══════════════════════════════════════════════════════════════════
+    // GOOGLE SHEETS INTEGRATION — SISPENA v7
+    // ═══════════════════════════════════════════════════════════════════
+    // LANGKAH SETUP:
+    // 1. Deploy Google Apps Script (file .gs terlampir) sebagai Web App
+    // 2. Tempel URL deployment di bawah ini (ganti teks placeholder)
+    // ═══════════════════════════════════════════════════════════════════
+    const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbxu7yZgZ7DjeOA1MPWRTatqdERvkf8o4ipcdEAudlR2Ac_QOaJO8cgE9woRICJvJZvp/exec';
+    // Contoh: 'https://script.google.com/macros/s/AKfycbxxx.../exec'
+
+    const GS_ENABLED = GOOGLE_SHEET_URL.startsWith('https://script.google.com') &&
+                       !GOOGLE_SHEET_URL.includes('PASTE_WEB_APP_URL') &&
+                       GOOGLE_SHEET_URL.includes('/exec');
+
+    async function gsLoad() {
+        if (!GS_ENABLED) return null;
+        // Jika dibuka via file://, fetch akan diblokir browser — skip
+        if (window.location.protocol === 'file:') {
+            console.warn('[GS] File dibuka via file:// — fetch diblokir browser. Gunakan server lokal atau hosting.');
+            return null;
+        }
+        try {
+            const res = await fetch(GOOGLE_SHEET_URL + '?action=load');
+            const json = await res.json();
+            if (json.error) throw new Error(json.error);
+            return json.data || [];
+        } catch (e) {
+            console.warn('[GS] Load gagal:', e.message);
+            return null;
+        }
+    }
+
+    async function gsSave(entry) {
+        if (!GS_ENABLED) return;
+        try {
+            await fetch(GOOGLE_SHEET_URL, {
+                method: 'POST',
+                body: JSON.stringify({ action: 'save', data: entry })
+            });
+        } catch (e) {
+            console.warn('[GS] Save gagal:', e.message);
+        }
+    }
+
+    async function gsDelete(id) {
+        if (!GS_ENABLED) return;
+        try {
+            await fetch(GOOGLE_SHEET_URL, {
+                method: 'POST',
+                body: JSON.stringify({ action: 'delete', id: id })
+            });
+        } catch (e) {
+            console.warn('[GS] Delete gagal:', e.message);
+        }
+    }
+
+    async function gsSyncAll(dataArr) {
+        if (!GS_ENABLED) return;
+        try {
+            const res = await fetch(GOOGLE_SHEET_URL, {
+                method: 'POST',
+                body: JSON.stringify({ action: 'saveAll', data: dataArr })
+            });
+            const json = await res.json();
+            return json;
+        } catch (e) {
+            console.warn('[GS] SyncAll gagal:', e.message);
+        }
+    }
+
+    function showSyncStatus(msg, type) {
+        // type: 'loading' | 'success' | 'error'
+        let el = document.getElementById('gs-sync-status');
+        if (!el) return;
+        const icons = { loading: '⏳', success: '☁️', error: '⚠️' };
+        const colors = { loading: '#c9a84c', success: '#1e8449', error: '#c0392b' };
+        el.textContent = (icons[type] || '') + ' ' + msg;
+        el.style.color = colors[type] || '#c9a84c';
+        el.style.opacity = '1';
+        if (type !== 'loading') {
+            setTimeout(() => { el.style.opacity = '0'; }, 4000);
+        }
+    }
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async function() {
+            let data = JSON.parse(localStorage.getItem('kesdam_data_v4') || 'null');
+            let editingId = null;
+            const PAGE_SIZE = 10;
+            let currentPage = 1;
+
+            const SUMBER_OPTIONS = ['Rupiah Murni', 'PNBP', 'Hibah', 'PHLN'];
+            const TW_OPTIONS = ['TW I', 'TW II', 'TW III', 'TW IV'];
+
+            const seedData = [{
+                    id: 1,
+                    nama: 'Jukcan Satker',
+                    pagu: 10000000,
+                    tw: '',
+                    sumber: 'Rupiah Murni',
+                    surat: {
+                        nomor: '',
+                        perihal: ''
+                    },
+                    laporan: {
+                        nomor: '',
+                        ket: ''
+                    },
+                    notulen: {
+                        nomor: '',
+                        agenda: ''
+                    }
+                },
+                {
+                    id: 2,
+                    nama: 'Renstra Satker 2025-2026',
+                    pagu: 10500000,
+                    tw: '',
+                    sumber: 'Rupiah Murni',
+                    surat: {
+                        nomor: '',
+                        perihal: ''
+                    },
+                    laporan: {
+                        nomor: '',
+                        ket: ''
+                    },
+                    notulen: {
+                        nomor: '',
+                        agenda: ''
+                    }
+                },
+                {
+                    id: 3,
+                    nama: 'Laporan Kinerja Instansi Pemerintah (LKIP)',
+                    pagu: 5000000,
+                    tw: '',
+                    sumber: 'Rupiah Murni',
+                    surat: {
+                        nomor: '',
+                        perihal: ''
+                    },
+                    laporan: {
+                        nomor: '',
+                        ket: ''
+                    },
+                    notulen: {
+                        nomor: '',
+                        agenda: ''
+                    }
+                },
+                {
+                    id: 4,
+                    nama: 'Laporan Kinerja (LKJ)',
+                    pagu: 6000000,
+                    tw: '',
+                    sumber: 'Rupiah Murni',
+                    surat: {
+                        nomor: '',
+                        perihal: ''
+                    },
+                    laporan: {
+                        nomor: '',
+                        ket: ''
+                    },
+                    notulen: {
+                        nomor: '',
+                        agenda: ''
+                    }
+                },
+                {
+                    id: 5,
+                    nama: 'Penyusunan Perjanjian Kinerja',
+                    pagu: 3500000,
+                    tw: '',
+                    sumber: 'Rupiah Murni',
+                    surat: {
+                        nomor: '',
+                        perihal: ''
+                    },
+                    laporan: {
+                        nomor: '',
+                        ket: ''
+                    },
+                    notulen: {
+                        nomor: '',
+                        agenda: ''
+                    }
+                },
+                {
+                    id: 6,
+                    nama: 'Revisi Perjanjian Kinerja',
+                    pagu: 3500000,
+                    tw: '',
+                    sumber: 'Rupiah Murni',
+                    surat: {
+                        nomor: '',
+                        perihal: ''
+                    },
+                    laporan: {
+                        nomor: '',
+                        ket: ''
+                    },
+                    notulen: {
+                        nomor: '',
+                        agenda: ''
+                    }
+                },
+                {
+                    id: 7,
+                    nama: 'Honor Operator Sisforen',
+                    pagu: 2000000,
+                    tw: '',
+                    sumber: 'Rupiah Murni',
+                    surat: {
+                        nomor: '',
+                        perihal: ''
+                    },
+                    laporan: {
+                        nomor: '',
+                        ket: ''
+                    },
+                    notulen: {
+                        nomor: '',
+                        agenda: ''
+                    }
+                },
+                {
+                    id: 8,
+                    nama: 'Pembangunan WTRB Tingkat Satker',
+                    pagu: 10000000,
+                    tw: '',
+                    sumber: 'Rupiah Murni',
+                    surat: {
+                        nomor: '',
+                        perihal: ''
+                    },
+                    laporan: {
+                        nomor: '',
+                        ket: ''
+                    },
+                    notulen: {
+                        nomor: '',
+                        agenda: ''
+                    }
+                },
+                {
+                    id: 9,
+                    nama: 'Rekon Internal Satker',
+                    pagu: 10000000,
+                    tw: '',
+                    sumber: 'Rupiah Murni',
+                    surat: {
+                        nomor: '',
+                        perihal: ''
+                    },
+                    laporan: {
+                        nomor: '',
+                        ket: ''
+                    },
+                    notulen: {
+                        nomor: '',
+                        agenda: ''
+                    }
+                },
+                {
+                    id: 10,
+                    nama: 'Renbut Satker 2027',
+                    pagu: 15000000,
+                    tw: '',
+                    sumber: 'Rupiah Murni',
+                    surat: {
+                        nomor: '',
+                        perihal: ''
+                    },
+                    laporan: {
+                        nomor: '',
+                        ket: ''
+                    },
+                    notulen: {
+                        nomor: '',
+                        agenda: ''
+                    }
+                },
+                {
+                    id: 11,
+                    nama: 'Rancangan Awal Renja TA. 2026',
+                    pagu: 15000000,
+                    tw: '',
+                    sumber: 'Rupiah Murni',
+                    surat: {
+                        nomor: '',
+                        perihal: ''
+                    },
+                    laporan: {
+                        nomor: '',
+                        ket: ''
+                    },
+                    notulen: {
+                        nomor: '',
+                        agenda: ''
+                    }
+                },
+                {
+                    id: 12,
+                    nama: 'Rancangan Renja TA. 2026',
+                    pagu: 15000000,
+                    tw: '',
+                    sumber: 'Rupiah Murni',
+                    surat: {
+                        nomor: '',
+                        perihal: ''
+                    },
+                    laporan: {
+                        nomor: '',
+                        ket: ''
+                    },
+                    notulen: {
+                        nomor: '',
+                        agenda: ''
+                    }
+                },
+                {
+                    id: 13,
+                    nama: 'Renja Satker TA. 2026',
+                    pagu: 15000000,
+                    tw: '',
+                    sumber: 'Rupiah Murni',
+                    surat: {
+                        nomor: '',
+                        perihal: ''
+                    },
+                    laporan: {
+                        nomor: '',
+                        ket: ''
+                    },
+                    notulen: {
+                        nomor: '',
+                        agenda: ''
+                    }
+                },
+                {
+                    id: 14,
+                    nama: 'Revisi Renja Satker TA. 2026',
+                    pagu: 10000000,
+                    tw: '',
+                    sumber: 'Rupiah Murni',
+                    surat: {
+                        nomor: '',
+                        perihal: ''
+                    },
+                    laporan: {
+                        nomor: '',
+                        ket: ''
+                    },
+                    notulen: {
+                        nomor: '',
+                        agenda: ''
+                    }
+                },
+                {
+                    id: 15,
+                    nama: 'RKA Satker TA. 2026',
+                    pagu: 20000000,
+                    tw: '',
+                    sumber: 'Rupiah Murni',
+                    surat: {
+                        nomor: '',
+                        perihal: ''
+                    },
+                    laporan: {
+                        nomor: '',
+                        ket: ''
+                    },
+                    notulen: {
+                        nomor: '',
+                        agenda: ''
+                    }
+                },
+                {
+                    id: 16,
+                    nama: 'Progja Satker TA. 2026',
+                    pagu: 20000000,
+                    tw: '',
+                    sumber: 'Rupiah Murni',
+                    surat: {
+                        nomor: '',
+                        perihal: ''
+                    },
+                    laporan: {
+                        nomor: '',
+                        ket: ''
+                    },
+                    notulen: {
+                        nomor: '',
+                        agenda: ''
+                    }
+                },
+                {
+                    id: 17,
+                    nama: 'Revisi Progja Satker TA. 2026',
+                    pagu: 10000000,
+                    tw: '',
+                    sumber: 'Rupiah Murni',
+                    surat: {
+                        nomor: '',
+                        perihal: ''
+                    },
+                    laporan: {
+                        nomor: '',
+                        ket: ''
+                    },
+                    notulen: {
+                        nomor: '',
+                        agenda: ''
+                    }
+                },
+                {
+                    id: 18,
+                    nama: 'Honor Operator Renproggar',
+                    pagu: 2400000,
+                    tw: '',
+                    sumber: 'Rupiah Murni',
+                    surat: {
+                        nomor: '',
+                        perihal: ''
+                    },
+                    laporan: {
+                        nomor: '',
+                        ket: ''
+                    },
+                    notulen: {
+                        nomor: '',
+                        agenda: ''
+                    }
+                },
+                {
+                    id: 19,
+                    nama: 'Penyusunan Laporan Evaluasi Progja',
+                    pagu: 5000000,
+                    tw: '',
+                    sumber: 'Rupiah Murni',
+                    surat: {
+                        nomor: '',
+                        perihal: ''
+                    },
+                    laporan: {
+                        nomor: '',
+                        ket: ''
+                    },
+                    notulen: {
+                        nomor: '',
+                        agenda: ''
+                    }
+                },
+                {
+                    id: 20,
+                    nama: 'Penyusunan Lap Dallakrenbang',
+                    pagu: 4000000,
+                    tw: '',
+                    sumber: 'Rupiah Murni',
+                    surat: {
+                        nomor: '',
+                        perihal: ''
+                    },
+                    laporan: {
+                        nomor: '',
+                        ket: ''
+                    },
+                    notulen: {
+                        nomor: '',
+                        agenda: ''
+                    }
+                },
+                {
+                    id: 21,
+                    nama: 'Dukungan Pimpinan',
+                    pagu: 43000000,
+                    tw: '',
+                    sumber: 'Rupiah Murni',
+                    surat: {
+                        nomor: '',
+                        perihal: ''
+                    },
+                    laporan: {
+                        nomor: '',
+                        ket: ''
+                    },
+                    notulen: {
+                        nomor: '',
+                        agenda: ''
+                    }
+                },
+            ];
+
+            // ── LOAD DATA: coba dari Google Sheets dulu, fallback ke localStorage ──
+            if (GS_ENABLED) {
+                showSyncStatus('Memuat data dari Google Sheets...', 'loading');
+                const gsData = await gsLoad();
+                if (gsData !== null && gsData.length > 0) {
+                    data = gsData;
+                    localStorage.setItem('kesdam_data_v4', JSON.stringify(data));
+                    showSyncStatus('Data dimuat dari Google Sheets (' + data.length + ' kegiatan)', 'success');
+                } else if (gsData !== null && gsData.length === 0 && !data) {
+                    data = seedData;
+                    saveData();
+                    gsSyncAll(data).then(() => showSyncStatus('Data awal diunggah ke Google Sheets', 'success'));
+                } else if (!data) {
+                    data = seedData;
+                    saveData();
+                    showSyncStatus('Google Sheets tidak terhubung — menggunakan data lokal', 'error');
+                } else {
+                    showSyncStatus('Menggunakan data lokal (Google Sheets tidak tersedia)', 'error');
+                }
+            } else {
+                if (!data) {
+                    data = seedData;
+                    saveData();
+                }
+            }
+
+            function fmtRupiah(n) {
+                if (!n && n !== 0) return '-';
+                return 'Rp ' + Number(n).toLocaleString('id-ID');
+            }
+
+
+            // ═══════════════════════════════════
+            // FILE UPLOAD SYSTEM
+            // ═══════════════════════════════════
+            let uploadTargetId = null;
+            // fileStore: { [kegiatan_id]: { rencana: {name, dataUrl}, laporan: {...}, produk: {...} } }
+            let fileStore = JSON.parse(localStorage.getItem('sispena_files') || '{}');
+
+            function saveFiles() {
+                localStorage.setItem('sispena_files', JSON.stringify(fileStore));
+            }
+
+            function openUploadModal(id) {
+                uploadTargetId = id;
+                const d = data.find(x => x.id === id);
+                document.getElementById('uploadKegiatan').textContent = '📌 ' + d.nama;
+                const files = fileStore[id] || {};
+
+                // Reset UI for each doc type
+                ['rencana', 'laporan', 'produk', 'wabku'].forEach(type => {
+                    const f = files[type];
+                    const dot = document.getElementById('dot-' + type);
+                    const drop = document.getElementById('drop-' + type);
+                    const prev = document.getElementById('prev-' + type);
+                    const name = document.getElementById('prevname-' + type);
+                    if (f && f.name) {
+                        dot.className = 'file-status-dot uploaded';
+                        drop.style.display = 'none';
+                        prev.classList.add('show');
+                        name.textContent = f.name;
+                    } else {
+                        dot.className = 'file-status-dot empty';
+                        drop.style.display = 'block';
+                        prev.classList.remove('show');
+                    }
+                });
+
+                document.getElementById('uploadModal').classList.add('open');
+            }
+
+            function closeUploadModal() {
+                document.getElementById('uploadModal').classList.remove('open');
+                uploadTargetId = null;
+            }
+            
+            // ── Fungsi Lihat Dokumen (inline preview modal) ──
+            function viewFile(type) {
+                if (!uploadTargetId) return;
+                const f = (fileStore[uploadTargetId] || {})[type];
+                if (!f || !f.dataUrl) {
+                    showToast("⚠ Dokumen belum diunggah atau tidak ditemukan.");
+                    return;
+                }
+
+                // Jika URL Google Drive (bukan base64), buka di tab baru
+                if (f.dataUrl.startsWith('http')) {
+                    window.open(f.dataUrl, '_blank');
+                    return;
+                }
+
+                // Deteksi tipe file dari nama
+                const name = f.name || '';
+                const ext = name.split('.').pop().toLowerCase();
+                const isImage = ['jpg','jpeg','png','gif','webp','bmp'].includes(ext);
+                const isPdf = ext === 'pdf' || f.dataUrl.includes('application/pdf');
+
+                // Hapus overlay lama jika ada
+                const existingOverlay = document.getElementById('docPreviewOverlay');
+                if (existingOverlay) existingOverlay.remove();
+
+                // Inject style sekali
+                if (!document.getElementById('previewKeyframe')) {
+                    const style = document.createElement('style');
+                    style.id = 'previewKeyframe';
+                    style.textContent = `
+                        @keyframes fadeInOverlay { from{opacity:0} to{opacity:1} }
+                        #docPreviewOverlay .preview-header {
+                            width:90%;max-width:900px;
+                            display:flex;justify-content:space-between;align-items:center;
+                            padding:0.8rem 1rem;
+                            background:rgba(26,61,31,0.98);
+                            border:1px solid rgba(201,168,76,0.35);
+                            border-bottom:none;border-radius:8px 8px 0 0;
+                        }
+                        #docPreviewOverlay .preview-header span {
+                            font-family:'Rajdhani',sans-serif;font-size:0.88rem;
+                            letter-spacing:1px;color:#e8c97a;font-weight:600;
+                            overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:75%;
+                        }
+                        #docPreviewOverlay .preview-close {
+                            background:rgba(192,57,43,0.3);border:1px solid rgba(192,57,43,0.5);
+                            color:#f1948a;border-radius:4px;padding:4px 12px;cursor:pointer;
+                            font-size:0.82rem;font-family:'Rajdhani',sans-serif;letter-spacing:1px;
+                            transition:all 0.2s;flex-shrink:0;
+                        }
+                        #docPreviewOverlay .preview-close:hover{background:rgba(192,57,43,0.65);}
+                        #docPreviewOverlay .preview-body {
+                            width:90%;max-width:900px;height:78vh;
+                            background:#1e1e1e;border-radius:0 0 8px 8px;
+                            overflow:hidden;display:flex;align-items:center;justify-content:center;
+                        }
+                        #docPreviewOverlay .preview-body img {
+                            max-width:100%;max-height:100%;object-fit:contain;
+                        }
+                        #docPreviewOverlay .preview-body iframe {
+                            width:100%;height:100%;border:none;
+                        }
+                        #docPreviewOverlay .preview-unsupported {
+                            text-align:center;padding:2.5rem;
+                            font-family:'Inter',sans-serif;color:#aaa;
+                        }
+                        #docPreviewOverlay .preview-unsupported .pu-icon{font-size:3.5rem;margin-bottom:1rem;}
+                        #docPreviewOverlay .preview-unsupported strong{color:#e8e8e8;font-size:1rem;}
+                        #docPreviewOverlay .preview-unsupported p{margin-top:0.5rem;font-size:0.82rem;color:#888;}
+                        #docPreviewOverlay .btn-dl-prev {
+                            margin-top:1.2rem;
+                            background:linear-gradient(135deg,#c9a84c,#a87d30);
+                            color:#1a3d1f;border:none;border-radius:5px;
+                            font-family:'Rajdhani',sans-serif;font-weight:700;letter-spacing:2px;
+                            padding:0.7rem 1.8rem;cursor:pointer;font-size:0.85rem;
+                            text-transform:uppercase;display:inline-block;
+                        }
+                    `;
+                    document.head.appendChild(style);
+                }
+
+                const overlay = document.createElement('div');
+                overlay.id = 'docPreviewOverlay';
+                overlay.style.cssText = 'position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,0.88);display:flex;flex-direction:column;align-items:center;justify-content:center;backdrop-filter:blur(6px);animation:fadeInOverlay 0.2s ease;';
+
+                const header = document.createElement('div');
+                header.className = 'preview-header';
+                header.innerHTML = `<span>📄 ${name}</span><button class="preview-close" id="btnClosePreview">✕ TUTUP</button>`;
+
+                const body = document.createElement('div');
+                body.className = 'preview-body';
+
+                if (isImage) {
+                    body.innerHTML = `<img src="${f.dataUrl}" alt="${name}">`;
+                } else if (isPdf) {
+                    body.innerHTML = `<iframe src="${f.dataUrl}" title="${name}"></iframe>`;
+                } else {
+                    // Word, Excel, dll – tidak bisa dipreview inline
+                    const safeDataUrl = f.dataUrl;
+                    const safeName = name;
+                    body.innerHTML = `
+                        <div class="preview-unsupported">
+                            <div class="pu-icon">📁</div>
+                            <strong>${safeName}</strong>
+                            <p>Tipe file ini tidak dapat dipreview langsung di browser.<br>Silakan download untuk membukanya.</p>
+                            <button class="btn-dl-prev" id="btnDownloadPreview">⬇ Download File</button>
+                        </div>`;
+                    setTimeout(() => {
+                        const btn = document.getElementById('btnDownloadPreview');
+                        if (btn) btn.onclick = function() {
+                            const a = document.createElement('a');
+                            a.href = safeDataUrl;
+                            a.download = safeName;
+                            a.click();
+                        };
+                    }, 0);
+                }
+
+                overlay.appendChild(header);
+                overlay.appendChild(body);
+                document.body.appendChild(overlay);
+
+                document.getElementById('btnClosePreview').onclick = function() { overlay.remove(); };
+                overlay.addEventListener('click', function(e) { if (e.target === overlay) overlay.remove(); });
+            }
+
+            // ════════════════════════════════════════════════════════
+            // UPLOAD FILE KE GOOGLE DRIVE — dengan progress bar
+            // Mendukung semua jenis file, ukuran besar via chunking
+            // ════════════════════════════════════════════════════════
+
+            // Ukuran chunk: 3MB (aman untuk Apps Script timeout)
+            const CHUNK_SIZE = 3 * 1024 * 1024;
+
+            // ── Konversi ArrayBuffer → base64 string ──
+            function arrayBufferToBase64(buffer) {
+                let binary = '';
+                const bytes = new Uint8Array(buffer);
+                for (let i = 0; i < bytes.byteLength; i++) {
+                    binary += String.fromCharCode(bytes[i]);
+                }
+                return btoa(binary);
+            }
+
+            // ── Tampilkan progress bar di dalam modal upload ──
+            function showUploadProgress(type, percent, label) {
+                let bar = document.getElementById('upload-progress-' + type);
+                if (!bar) {
+                    // Buat elemen progress sekali
+                    bar = document.createElement('div');
+                    bar.id = 'upload-progress-' + type;
+                    bar.style.cssText = 'margin-top:6px;background:#e8f0e8;border-radius:4px;height:6px;overflow:hidden';
+                    bar.innerHTML = '<div id="upload-progress-fill-' + type + '" style="height:100%;background:linear-gradient(90deg,#1a3d1f,#4a8c55);border-radius:4px;transition:width 0.3s;width:0%"></div>';
+                    const prev = document.getElementById('prev-' + type);
+                    if (prev) prev.parentNode.insertBefore(bar, prev.nextSibling);
+                }
+                bar.style.display = 'block';
+                document.getElementById('upload-progress-fill-' + type).style.width = percent + '%';
+                const nameLabel = document.getElementById('prevname-' + type);
+                if (nameLabel) nameLabel.textContent = label || ('⏳ ' + percent + '%');
+            }
+
+            function hideUploadProgress(type) {
+                const bar = document.getElementById('upload-progress-' + type);
+                if (bar) bar.style.display = 'none';
+            }
+
+            // ── Upload satu file ke Google Drive (chunked jika besar) ──
+            async function uploadFileToDrive(file, kegiatanId, kegiatanNama, docType) {
+                const totalChunks = Math.ceil(file.size / CHUNK_SIZE);
+                let uploadId = null;
+
+                for (let i = 0; i < totalChunks; i++) {
+                    const start  = i * CHUNK_SIZE;
+                    const end    = Math.min(start + CHUNK_SIZE, file.size);
+                    const chunk  = file.slice(start, end);
+                    const buffer = await chunk.arrayBuffer();
+                    const b64    = arrayBufferToBase64(buffer);
+                    const pct    = Math.round(((i + 1) / totalChunks) * 100);
+
+                    const payload = {
+                        action      : 'saveFile',
+                        fileName    : file.name,
+                        mimeType    : file.type || 'application/octet-stream',
+                        base64Data  : b64,
+                        kegiatanId  : kegiatanId,
+                        kegiatanNama: kegiatanNama,
+                        docType     : docType,
+                        chunkIndex  : i,
+                        totalChunks : totalChunks,
+                        uploadId    : uploadId   // null di chunk pertama
+                    };
+
+                    const res  = await fetch(GOOGLE_SHEET_URL, {
+                        method : 'POST',
+                        body   : JSON.stringify(payload)
+                    });
+                    const json = await res.json();
+
+                    if (!json.success && !json.uploadId) {
+                        throw new Error(json.error || 'Upload chunk ' + i + ' gagal');
+                    }
+
+                    // Apps Script kembalikan uploadId setelah chunk pertama
+                    if (json.uploadId) uploadId = json.uploadId;
+
+                    // Kembalikan hasil final di chunk terakhir
+                    if (i === totalChunks - 1 && json.fileUrl) {
+                        return json;
+                    }
+                }
+
+                throw new Error('Upload selesai tapi URL tidak diterima');
+            }
+
+            // ── handleFile: dipanggil dari modal Upload Dokumen ──
+            async function handleFile(type, input) {
+                const file = input.files[0];
+                if (!file) return;
+
+                const nameLabel     = document.getElementById('prevname-' + type);
+                const dropZone      = document.getElementById('drop-' + type);
+                const prevArea      = document.getElementById('prev-' + type);
+                const kegiatanEntry = data.find(x => x.id === uploadTargetId);
+                const kegiatanNama  = kegiatanEntry ? kegiatanEntry.nama : ('Kegiatan_' + uploadTargetId);
+
+                // Tampilkan loading state
+                prevArea.classList.add('show');
+                dropZone.style.display = 'none';
+                showUploadProgress(type, 0, '⏳ Mempersiapkan upload...');
+
+                if (!GS_ENABLED) {
+                    // Fallback lokal jika Drive belum dikonfigurasi
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        saveFileData(type, file.name, e.target.result);
+                        nameLabel.textContent = file.name;
+                        hideUploadProgress(type);
+                        showToast('⚠ Drive belum terhubung — file disimpan lokal saja');
+                    };
+                    reader.readAsDataURL(file);
+                    return;
+                }
+
+                try {
+                    // Simulasi progress saat membaca file
+                    showUploadProgress(type, 10, '⏳ Membaca file...');
+
+                    const totalChunks = Math.ceil(file.size / CHUNK_SIZE);
+                    let uploadId = null;
+                    let finalResult = null;
+
+                    for (let i = 0; i < totalChunks; i++) {
+                        const start  = i * CHUNK_SIZE;
+                        const end    = Math.min(start + CHUNK_SIZE, file.size);
+                        const chunk  = file.slice(start, end);
+                        const buffer = await chunk.arrayBuffer();
+                        const b64    = arrayBufferToBase64(buffer);
+                        const pct    = Math.round(10 + ((i + 1) / totalChunks) * 85);
+
+                        showUploadProgress(type, pct,
+                            totalChunks > 1
+                                ? `⏳ Mengunggah bagian ${i+1}/${totalChunks}...`
+                                : '⏳ Mengunggah ke Google Drive...'
+                        );
+
+                        const res = await fetch(GOOGLE_SHEET_URL, {
+                            method : 'POST',
+                            body   : JSON.stringify({
+                                action      : 'saveFile',
+                                fileName    : file.name,
+                                mimeType    : file.type || 'application/octet-stream',
+                                base64Data  : b64,
+                                kegiatanId  : uploadTargetId,
+                                kegiatanNama: kegiatanNama,
+                                docType     : type,
+                                chunkIndex  : i,
+                                totalChunks : totalChunks,
+                                uploadId    : uploadId
+                            })
+                        });
+                        const json = await res.json();
+
+                        if (json.uploadId) uploadId = json.uploadId;
+                        if (json.fileUrl)  finalResult = json;
+
+                        if (!json.success && !json.uploadId) {
+                            throw new Error(json.error || 'Upload gagal di bagian ' + (i+1));
+                        }
+                    }
+
+                    if (finalResult && finalResult.fileUrl) {
+                        saveFileData(type, file.name, finalResult.fileUrl);
+                        nameLabel.textContent = file.name;
+                        hideUploadProgress(type);
+                        showToast('✔ File berhasil diunggah ke Google Drive');
+                    } else {
+                        throw new Error('URL file tidak diterima dari server');
+                    }
+
+                } catch (err) {
+                    console.error('[Drive Upload] Error:', err.message);
+                    // Fallback: simpan lokal
+                    const reader = new FileReader();
+                    reader.onload = (ev) => {
+                        saveFileData(type, file.name, ev.target.result);
+                        nameLabel.textContent = file.name;
+                        hideUploadProgress(type);
+                        showToast('⚠ Drive gagal — file disimpan lokal sementara');
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+
+            // Fungsi pembantu untuk menyimpan data file
+            function saveFileData(type, name, dataUrl) {
+                if (!fileStore[uploadTargetId]) fileStore[uploadTargetId] = {};
+                fileStore[uploadTargetId][type] = {
+                    name: name,
+                    dataUrl: dataUrl
+                };
+                const dot = document.getElementById('dot-' + type);
+                dot.className = 'file-status-dot uploaded';
+                saveFiles();
+            }
+
+            function removeFile(type) {
+                if (!uploadTargetId) return;
+                if (!confirm('Hapus file ' + type + ' ini?')) return;
+                if (fileStore[uploadTargetId]) delete fileStore[uploadTargetId][type];
+                const dot = document.getElementById('dot-' + type);
+                const drop = document.getElementById('drop-' + type);
+                const prev = document.getElementById('prev-' + type);
+                dot.className = 'file-status-dot empty';
+                drop.style.display = 'block';
+                prev.classList.remove('show');
+                saveFiles();
+                showToast('🗑 File dihapus');
+            }
+
+            function saveUpload() {
+                saveFiles();
+                closeUploadModal();
+                renderTable();
+                updateDashboard();
+                showToast('✔ Dokumen berhasil disimpan');
+            }
+
+            function getFileCount(id) {
+                const f = fileStore[id] || {};
+                return ['rencana', 'laporan', 'produk', 'wabku'].filter(t => f[t] && f[t].name).length;
+            }
+
+            function hasFile(id, type) {
+                const f = fileStore[id] || {};
+                return !!(f[type] && f[type].name);
+            }
+
+            function downloadFile(id, type) {
+                const f = (fileStore[id] || {})[type];
+                if (!f) return;
+                const a = document.createElement('a');
+                a.href = f.dataUrl;
+                a.download = f.name;
+                a.click();
+            }
+
+            function saveData() {
+                localStorage.setItem('kesdam_data_v4', JSON.stringify(data));
+                updateStats();
+                updateDashboard();
+            }
+
+            // ── Google Sheets: simpan satu entry ──
+            async function gsSaveEntry(entry) {
+                if (!GS_ENABLED) return;
+                showSyncStatus('Menyimpan ke Google Sheets...', 'loading');
+                try {
+                    await gsSave(entry);
+                    showSyncStatus('Tersimpan di Google Sheets ✓', 'success');
+                } catch(e) {
+                    showSyncStatus('Gagal simpan ke Sheets: ' + e.message, 'error');
+                }
+            }
+
+            // ── Google Sheets: hapus satu entry ──
+            async function gsDeleteEntry(id) {
+                if (!GS_ENABLED) return;
+                showSyncStatus('Menghapus dari Google Sheets...', 'loading');
+                try {
+                    await gsDelete(id);
+                    showSyncStatus('Data dihapus dari Google Sheets ✓', 'success');
+                } catch(e) {
+                    showSyncStatus('Gagal hapus dari Sheets: ' + e.message, 'error');
+                }
+            }
+
+            // ── Google Sheets: sinkron semua data ──
+            async function doSyncAll() {
+                if (!GS_ENABLED) {
+                    showToast('⚠ Google Sheets belum dikonfigurasi');
+                    return;
+                }
+                showSyncStatus('Sinkronisasi semua data...', 'loading');
+                const result = await gsSyncAll(data);
+                if (result && result.success) {
+                    showSyncStatus('Sinkronisasi selesai: ' + result.count + ' kegiatan ✓', 'success');
+                    showToast('☁️ Sinkronisasi Google Sheets selesai');
+                } else {
+                    showSyncStatus('Sinkronisasi gagal', 'error');
+                }
+            }
+
+            function updateStats() {
+                document.getElementById('stat-total').textContent = data.length;
+                document.getElementById('stat-surat').textContent = data.filter(d => hasFile(d.id, 'rencana')).length;
+                document.getElementById('stat-laporan').textContent = data.filter(d => hasFile(d.id, 'laporan')).length;
+                document.getElementById('stat-notulen').textContent = data.filter(d => hasFile(d.id, 'produk')).length;
+                document.getElementById('stat-laporan-wabku').textContent = data.filter(d => hasFile(d.id, 'wabku')).length;
+            }
+
+            function updateDashboard() {
+                const total = data.length;
+                if (total === 0) return;
+                const rencana = data.filter(d => hasFile(d.id, 'rencana')).length;
+                const laporan = data.filter(d => hasFile(d.id, 'laporan')).length;
+                const produk = data.filter(d => hasFile(d.id, 'produk')).length;
+                const wabku = data.filter(d => hasFile(d.id, 'wabku')).length;
+
+                const pctR = Math.round(rencana / total * 100);
+                const pctL = Math.round(laporan / total * 100);
+                const pctP = Math.round(produk / total * 100);
+                const pctW = Math.round(wabku / total * 100);
+
+                document.getElementById('dash-rencana-pct').textContent = pctR + '%';
+                document.getElementById('dash-laporan-pct').textContent = pctL + '%';
+                document.getElementById('dash-produk-pct').textContent = pctP + '%';
+                document.getElementById('dash-wabku-pct').textContent = pctW + '%';
+                document.getElementById('dash-rencana-count').textContent = `${rencana} dari ${total} kegiatan`;
+                document.getElementById('dash-laporan-count').textContent = `${laporan} dari ${total} kegiatan`;
+                document.getElementById('dash-produk-count').textContent = `${produk} dari ${total} kegiatan`;
+                document.getElementById('dash-wabku-count').textContent = `${wabku} dari ${total} kegiatan`;
+
+                setTimeout(() => {
+                    document.getElementById('dash-rencana-bar').style.width = pctR + '%';
+                    document.getElementById('dash-laporan-bar').style.width = pctL + '%';
+                    document.getElementById('dash-produk-bar').style.width = pctP + '%';
+                    document.getElementById('dash-wabku-bar').style.width = pctW + '%';
+                }, 100);
+            }
+
+            function getFiltered() {
+                const q = document.getElementById('searchInput').value.toLowerCase();
+                const fd = document.getElementById('filterDoc').value;
+                const fp = document.getElementById('filterPagu').value;
+                return data.filter(d => {
+                    const matchQ = !q || d.nama.toLowerCase().includes(q) || String(d.id).includes(q) || fmtRupiah(d.pagu).toLowerCase().includes(q);
+                    const matchD = !fd ||
+                        (fd === 'surat'   && hasFile(d.id, 'rencana')) ||
+                        (fd === 'laporan' && hasFile(d.id, 'laporan')) ||
+                        (fd === 'notulen' && hasFile(d.id, 'produk'))  ||
+                        (fd === 'wabku'   && hasFile(d.id, 'wabku'));
+                    const pagu = d.pagu || 0;
+                    const matchP = !fp ||
+                        (fp === 'kecil' && pagu <= 5000000) ||
+                        (fp === 'sedang' && pagu > 5000000 && pagu <= 15000000) ||
+                        (fp === 'besar' && pagu > 15000000);
+                    return matchQ && matchD && matchP;
+                });
+            }
+
+            function twBadges(tw) {
+                if (!tw) return ['', '', '', ''];
+                const tws = tw.split(',').map(t => t.trim());
+                const classes = {
+                    'TW I': 'tw-i',
+                    'TW II': 'tw-ii',
+                    'TW III': 'tw-iii',
+                    'TW IV': 'tw-iv'
+                };
+                return ['TW I', 'TW II', 'TW III', 'TW IV'].map(t =>
+                    tws.includes(t) ? `<span class="tw-badge ${classes[t]}">${t}</span>` : ''
+                );
+            }
+
+            function sumberBadge(s) {
+                if (!s) return '-';
+                const cls = {
+                    'Rupiah Murni': 'sumber-rupiah',
+                    'PNBP': 'sumber-pnbp',
+                    'Hibah': 'sumber-hibah',
+                    'PHLN': 'sumber-phln'
+                };
+                return `<span class="sumber-badge ${cls[s]||'sumber-rupiah'}">${s}</span>`;
+            }
+
+            function renderTable() {
+                const filtered = getFiltered();
+                const total = filtered.length;
+                const pages = Math.ceil(total / PAGE_SIZE) || 1;
+                if (currentPage > pages) currentPage = 1;
+                const start = (currentPage - 1) * PAGE_SIZE;
+                const slice = filtered.slice(start, start + PAGE_SIZE);
+
+                document.getElementById('pageInfo').textContent = total === 0
+                    ? 'Tidak ada data'
+                    : `Menampilkan ${start + 1}–${Math.min(start + PAGE_SIZE, total)} dari ${total} data`;
+
+                const pb = document.getElementById('pageButtons');
+                pb.innerHTML = '';
+                for (let i = 1; i <= pages; i++) {
+                    const b = document.createElement('button');
+                    b.className = 'page-btn' + (i === currentPage ? ' active' : '');
+                    b.textContent = i;
+                    b.onclick = () => {
+                        currentPage = i;
+                        renderTable();
+                    };
+                    pb.appendChild(b);
+                }
+
+                const tb = document.getElementById('tableBody');
+                if (slice.length === 0) {
+                    tb.innerHTML = `<tr><td colspan="9"><div class="empty-state"><div class="empty-icon">📂</div><div class="empty-text">Tidak ada data ditemukan</div></div></td></tr>`;
+                    return;
+                }
+
+                tb.innerHTML = slice.map((d, i) => {
+                    const delay = i * 0.05;
+                    const [twI, twII, twIII, twIV] = twBadges(d.tw);
+                    const hasR = hasFile(d.id, 'rencana');
+                    const hasL = hasFile(d.id, 'laporan');
+                    const hasP = hasFile(d.id, 'produk');
+                    const hasW = hasFile(d.id, 'wabku');
+                    const suratBadge = `<span class="doc-badge ${hasR?'doc-surat has-file':'empty'}" onclick="openUploadModal(${d.id})" title="${hasR?'File tersedia — klik untuk kelola':'Belum ada file — klik untuk upload'}">
+        <span class="doc-dot"></span>RENCANA KEG. ${hasR?'✓':'＋'}</span>`;
+                    const lapBadge = `<span class="doc-badge ${hasL?'doc-laporan has-file':'empty'}" onclick="openUploadModal(${d.id})" title="${hasL?'File tersedia — klik untuk kelola':'Belum ada file — klik untuk upload'}">
+        <span class="doc-dot"></span>LAPORAN KEG. ${hasL?'✓':'＋'}</span>`;
+                    const notBadge = `<span class="doc-badge ${hasP?'doc-notulen has-file':'empty'}" onclick="openUploadModal(${d.id})" title="${hasP?'File tersedia — klik untuk kelola':'Belum ada file — klik untuk upload'}">
+        <span class="doc-dot"></span>PRODUK KEG. ${hasP?'✓':'＋'}</span>`;
+                    const wabkuBadge = `<span class="doc-badge ${hasW?'doc-wabku has-file':'empty'}" onclick="openUploadModal(${d.id})" title="${hasW?'File tersedia — klik untuk kelola':'Belum ada file — klik untuk upload'}">
+        <span class="doc-dot"></span>WABKU ${hasW?'✓':'＋'}</span>`;
+                    return `
+        <tr style="animation-delay:${delay}s">
+          <td class="td-number">${d.id}</td>
+          <td class="td-name"><strong style="cursor:pointer;text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(201,168,76,0.4)" onclick="showDetail(${d.id})">${d.nama}</strong></td>
+          <td class="td-date">${fmtRupiah(d.pagu)}</td>
+          <td style="text-align:center">${twI}</td>
+          <td style="text-align:center">${twII}</td>
+          <td style="text-align:center">${twIII}</td>
+          <td style="text-align:center">${twIV}</td>
+          <td style="text-align:center">${sumberBadge(d.sumber)}</td>
+          <td><div class="doc-cell">${suratBadge}${lapBadge}${notBadge}${wabkuBadge}</div></td>
+          <td>
+            <div class="action-cell">
+              <button class="btn-action btn-edit" onclick="editEntry(${d.id})">EDIT</button>
+              <button class="btn-action btn-del" onclick="deleteEntry(${d.id})">HAPUS</button>
+            </div>
+          </td>
+        </tr>
+      `;
+                }).join('');
+            }
+
+            function openModal(id = null) {
+                editingId = id;
+                if (id) {
+                    const d = data.find(x => x.id === id);
+                    document.getElementById('modalTitle').textContent = 'Edit Kegiatan';
+                    document.getElementById('f-nama').value = d.nama;
+                    document.getElementById('f-pagu').value = d.pagu || '';
+                    document.getElementById('f-sumber').value = d.sumber || 'Rupiah Murni';
+                    const twArr = (d.tw || '').split(',').map(t => t.trim());
+                    ['TW I', 'TW II', 'TW III', 'TW IV'].forEach(t => {
+                        const cb = document.getElementById('f-tw-' + t.replace(' ', '-'));
+                        if (cb) cb.checked = twArr.includes(t);
+                    });
+                    document.getElementById('f-surat-nomor').value = d.surat.nomor;
+
+                    document.getElementById('f-laporan-nomor').value = d.laporan.nomor;
+
+                    document.getElementById('f-notulen-nomor').value = d.notulen.nomor;
+
+                    document.getElementById('f-wabku-nomor').value = d.wabku ? (d.wabku.nomor || '') : '';
+
+                } else {
+                    document.getElementById('modalTitle').textContent = 'Tambah Kegiatan';
+                    ['f-nama', 'f-pagu', 'f-surat-nomor', 'f-laporan-nomor', 'f-notulen-nomor', 'f-wabku-nomor'].forEach(id => document.getElementById(id).value = '');
+                    document.getElementById('f-sumber').value = 'Rupiah Murni';
+                    ['TW-I', 'TW-II', 'TW-III', 'TW-IV'].forEach(t => {
+                        const cb = document.getElementById('f-tw-' + t);
+                        if (cb) cb.checked = false;
+                    });
+                }
+                document.getElementById('formModal').classList.add('open');
+            }
+
+            function editEntry(id) {
+                openModal(id);
+            }
+
+            function closeModal() {
+                document.getElementById('formModal').classList.remove('open');
+                editingId = null;
+                resetInlineFiles();
+            }
+
+            async function saveEntry() {
+                const nama = document.getElementById('f-nama').value.trim();
+                const pagu = parseInt(document.getElementById('f-pagu').value) || 0;
+                const sumber = document.getElementById('f-sumber').value;
+                const twArr = ['TW I', 'TW II', 'TW III', 'TW IV'].filter(t => {
+                    const cb = document.getElementById('f-tw-' + t.replace(' ', '-'));
+                    return cb && cb.checked;
+                });
+                if (!nama) {
+                    showToast('⚠ Nama kegiatan wajib diisi');
+                    return;
+                }
+
+                const entry = {
+                    nama,
+                    pagu,
+                    sumber,
+                    tw: twArr.join(','),
+                    surat: {
+                        nomor: document.getElementById('f-surat-nomor').value.trim()
+                    },
+                    laporan: {
+                        nomor: document.getElementById('f-laporan-nomor').value.trim()
+                    },
+                    notulen: {
+                        nomor: document.getElementById('f-notulen-nomor').value.trim()
+                    },
+                    wabku: {
+                        nomor: document.getElementById('f-wabku-nomor').value.trim()
+                    }
+                };
+
+                if (editingId) {
+                    const idx = data.findIndex(x => x.id === editingId);
+                    data[idx] = { ...data[idx], ...entry };
+                    const saved = data[idx];
+                    await flushInlineFiles(saved.id);
+                    saveData();
+                    closeModal();
+                    renderTable();
+                    updateStats();
+                    showToast('✔ Data kegiatan berhasil diperbarui');
+                    gsSaveEntry(saved);
+                } else {
+                    const maxId = data.length ? Math.max(...data.map(d => d.id)) : 0;
+                    const newEntry = { id: maxId + 1, ...entry };
+                    data.push(newEntry);
+                    await flushInlineFiles(newEntry.id);
+                    saveData();
+                    closeModal();
+                    renderTable();
+                    updateStats();
+                    showToast('✔ Kegiatan baru berhasil disimpan');
+                    gsSaveEntry(newEntry);
+                }
+            }
+
+            function deleteEntry(id) {
+                if (!confirm('Hapus data kegiatan ini?')) return;
+                data = data.filter(x => x.id !== id);
+                saveData();
+                renderTable();
+                showToast('🗑 Data kegiatan dihapus');
+                gsDeleteEntry(id);
+            }
+
+            function showDetail(id) {
+                const d = data.find(x => x.id === id);
+                const docCard = (title, nomor, label, val, colorClass) => `
+      <div class="detail-doc-card">
+        <div class="detail-doc-header">
+          <div class="detail-doc-name" style="color:${colorClass}">${title}</div>
+          <div class="detail-doc-meta">${nomor || '—'}</div>
+        </div>
+        <div style="font-size:0.83rem;color:#555">${label}: <span style="color:var(--text-main)">${val || '<em style="color:#aaa">Tidak tersedia</em>'}</span></div>
+      </div>`;
+                const [twI, twII, twIII, twIV] = twBadges(d.tw);
+                document.getElementById('detailBody').innerHTML = `
+      <div class="detail-section">
+        <div class="detail-section-title">Informasi Kegiatan</div>
+        <div style="margin-bottom:0.5rem"><span style="font-family:Rajdhani,sans-serif;font-size:0.7rem;letter-spacing:2px;color:var(--army-light)">NO. KEGIATAN</span><br><span style="font-size:1.5rem;font-family:Rajdhani,sans-serif;font-weight:700;color:var(--gold)">#${d.id}</span></div>
+        <div style="font-size:1.05rem;color:var(--text-main);margin-bottom:0.6rem">${d.nama}</div>
+        <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:0.5rem">
+          <div><span style="font-family:Rajdhani,sans-serif;font-size:0.68rem;color:var(--army-light);letter-spacing:1px">PAGU ANGGARAN</span><br><span style="font-family:Rajdhani,sans-serif;font-size:1rem;color:var(--gold-light);font-weight:700">💰 ${fmtRupiah(d.pagu)}</span></div>
+          <div><span style="font-family:Rajdhani,sans-serif;font-size:0.68rem;color:var(--army-light);letter-spacing:1px">SUMBER</span><br>${sumberBadge(d.sumber)}</div>
+        </div>
+        <div><span style="font-family:Rajdhani,sans-serif;font-size:0.68rem;color:var(--army-light);letter-spacing:1px;display:block;margin-bottom:4px">RENCANA PENARIKAN DANA</span>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">${twI||''}${twII||''}${twIII||''}${twIV||''}</div>
+        </div>
+      </div>
+      <div class="detail-section">
+        <div class="detail-section-title">Dokumen Terkait</div>
+        ${docCard('RENCANA KEGIATAN', d.surat.nomor, 'Perihal', d.surat.perihal, '#7ab8e0')}
+        ${docCard('LAPORAN KEGIATAN', d.laporan.nomor, 'Keterangan', d.laporan.ket, '#7adc9a')}
+        ${docCard('PRODUK KEGIATAN', d.notulen.nomor, 'Agenda', d.notulen.agenda, 'var(--gold-light)')}
+        ${d.wabku ? docCard('LAPORAN WABKU', d.wabku.nomor, 'Keterangan', d.wabku.ket || '', '#c39bd3') : ''}
+      </div>`;
+                document.getElementById('detailModal').classList.add('open');
+            }
+
+            function closeDetail() {
+                document.getElementById('detailModal').classList.remove('open');
+            }
+
+            function exportData() {
+                const filtered = getFiltered();
+                let csv = 'No,Nama Kegiatan,Pagu Anggaran,TW I,TW II,TW III,TW IV,Sumber Anggaran,No. Rencana Kegiatan,No. Laporan Kegiatan,No. Produk Kegiatan,No. Laporan Wabku\n';
+                filtered.forEach(d => {
+                    const tws = (d.tw || '').split(',').map(t => t.trim());
+                    csv += `${d.id},"${d.nama}",${d.pagu},${tws.includes('TW I')?'v':''},${tws.includes('TW II')?'v':''},${tws.includes('TW III')?'v':''},${tws.includes('TW IV')?'v':''},"${d.sumber||''}","${d.surat?.nomor||''}","${d.laporan?.nomor||''}","${d.notulen?.nomor||''}","${d.wabku?.nomor||''}"\n`;
+                });
+                const blob = new Blob([csv], {
+                    type: 'text/csv;charset=utf-8;'
+                });
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = `SISPENA_Kesdam_IBB_${new Date().toISOString().slice(0,10)}.csv`;
+                a.click();
+                showToast('⬇ Data berhasil diekspor ke CSV');
+            }
+
+            function showToast(msg) {
+                const t = document.getElementById('toast');
+                t.textContent = msg;
+                t.classList.add('show');
+                setTimeout(() => t.classList.remove('show'), 3000);
+            }
+
+            function switchTab(tab, el) {
+                document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+                if (el) el.classList.add('active');
+                if (tab !== 'beranda' && tab !== 'arsip') showToast('ℹ Fitur ini sedang dikembangkan');
+            }
+
+            // Buffer sementara untuk file inline yang dipilih sebelum disimpan
+            let inlineFileBuffer = {};
+
+            function handleInlineFile(type, input) {
+                const file = input.files[0];
+                if (!file) return;
+                const prev = document.getElementById('prev-inline-' + type);
+                if (!prev) return;
+                // Baca file sebagai base64 dan simpan ke buffer sementara
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    inlineFileBuffer[type] = { name: file.name, dataUrl: e.target.result };
+                    prev.innerHTML = '<span>📎</span><span class="fp-name" title="' + file.name + '">' + file.name + '</span><span style="color:#888;font-size:0.72rem">(' + (file.size/1024).toFixed(0) + ' KB)</span><button class="fp-remove" title="Hapus file" onclick="removeInlineFile(\'' + type + '\')">✕</button>';
+                    prev.classList.add('visible');
+                };
+                reader.readAsDataURL(file);
+            }
+
+            function removeInlineFile(type) {
+                delete inlineFileBuffer[type];
+                const input = document.getElementById('f-' + type + '-file');
+                if (input) input.value = '';
+                const prev = document.getElementById('prev-inline-' + type);
+                if (prev) { prev.innerHTML = ''; prev.classList.remove('visible'); }
+            }
+
+            // Simpan file-file dari buffer inline ke Google Drive + fileStore
+            async function flushInlineFiles(entryId) {
+                if (Object.keys(inlineFileBuffer).length === 0) return;
+                if (!fileStore[entryId]) fileStore[entryId] = {};
+                const typeMap = { surat: 'rencana', laporan: 'laporan', produk: 'produk', wabku: 'wabku' };
+                const kegiatanEntry = data.find(x => x.id === entryId);
+                const kegiatanNama  = kegiatanEntry ? kegiatanEntry.nama : ('Kegiatan_' + entryId);
+
+                for (const [type, fileData] of Object.entries(inlineFileBuffer)) {
+                    const storeType = typeMap[type] || type;
+
+                    if (!GS_ENABLED) {
+                        // Simpan lokal jika Drive belum dikonfigurasi
+                        fileStore[entryId][storeType] = { name: fileData.name, dataUrl: fileData.dataUrl };
+                        continue;
+                    }
+
+                    try {
+                        showSyncStatus('Mengunggah ' + fileData.name + ' ke Drive...', 'loading');
+
+                        // Decode base64 dataUrl → Uint8Array lalu chunk
+                        const b64Full    = fileData.dataUrl.split(',')[1];
+                        const mimeType   = fileData.dataUrl.split(';')[0].split(':')[1];
+                        const binary     = atob(b64Full);
+                        const totalBytes = binary.length;
+                        const totalChunks = Math.ceil(totalBytes / CHUNK_SIZE);
+                        let uploadId = null;
+                        let finalResult = null;
+
+                        for (let i = 0; i < totalChunks; i++) {
+                            const start    = i * CHUNK_SIZE;
+                            const end      = Math.min(start + CHUNK_SIZE, totalBytes);
+                            const chunkStr = binary.substring(start, end);
+                            const b64chunk = btoa(chunkStr);
+
+                            const res = await fetch(GOOGLE_SHEET_URL, {
+                                method : 'POST',
+                                body   : JSON.stringify({
+                                    action      : 'saveFile',
+                                    fileName    : fileData.name,
+                                    mimeType    : mimeType,
+                                    base64Data  : b64chunk,
+                                    kegiatanId  : entryId,
+                                    kegiatanNama: kegiatanNama,
+                                    docType     : storeType,
+                                    chunkIndex  : i,
+                                    totalChunks : totalChunks,
+                                    uploadId    : uploadId
+                                })
+                            });
+                            const json = await res.json();
+
+                            if (json.uploadId) uploadId = json.uploadId;
+                            if (json.fileUrl)  finalResult = json;
+
+                            if (!json.success && !json.uploadId) {
+                                throw new Error(json.error || 'Chunk ' + i + ' gagal');
+                            }
+                        }
+
+                        if (finalResult && finalResult.fileUrl) {
+                            fileStore[entryId][storeType] = {
+                                name   : fileData.name,
+                                dataUrl: finalResult.fileUrl,
+                                fileId : finalResult.fileId
+                            };
+                            showSyncStatus('File ' + fileData.name + ' berhasil diunggah ✓', 'success');
+                        } else {
+                            throw new Error('URL tidak diterima');
+                        }
+
+                    } catch (err) {
+                        console.warn('[Drive Upload] Gagal, fallback lokal:', err.message);
+                        fileStore[entryId][storeType] = { name: fileData.name, dataUrl: fileData.dataUrl };
+                        showSyncStatus('Drive gagal — ' + fileData.name + ' disimpan lokal', 'error');
+                    }
+                }
+                saveFiles();
+                inlineFileBuffer = {};
+            }
+
+            // Reset buffer dan preview file inline di modal
+            function resetInlineFiles() {
+                inlineFileBuffer = {};
+                ['surat', 'laporan', 'produk', 'wabku'].forEach(function(type) {
+                    const input = document.getElementById('f-' + type + '-file');
+                    if (input) input.value = '';
+                    const prev = document.getElementById('prev-inline-' + type);
+                    if (prev) { prev.innerHTML = ''; prev.classList.remove('visible'); }
+                });
+            }
+
+            updateStats();
+            updateDashboard();
+            renderTable();
+
+            // ── Tampilkan indikator URL Google Sheets ──
+            const gsIndicator = document.getElementById('gs-url-indicator');
+            if (gsIndicator) {
+                if (GS_ENABLED) {
+                    gsIndicator.textContent = '🔗 Terhubung ke Google Sheets';
+                    gsIndicator.style.color = '#1e8449';
+                } else {
+                    gsIndicator.textContent = '⚠ Google Sheets belum dikonfigurasi — data hanya tersimpan lokal';
+                    gsIndicator.style.color = '#c0392b';
+                    showSyncStatus('Belum terhubung — tempel URL Apps Script untuk aktifkan sinkronisasi', 'error');
+                }
+            }
+
+            // drag-over highlight
+            document.querySelectorAll(".file-drop-zone").forEach(z => {
+                z.addEventListener("dragover", e => {
+                    e.preventDefault();
+                    z.classList.add("drag-over");
+                });
+                z.addEventListener("dragleave", () => z.classList.remove("drag-over"));
+            });
+
+            // Expose functions to global scope for onclick handlers in HTML
+            window.openUploadModal = openUploadModal;
+            window.closeUploadModal = closeUploadModal;
+            window.handleFile = handleFile;
+            window.removeFile = removeFile;
+            window.saveUpload = saveUpload;
+            window.downloadFile = downloadFile;
+            window.openModal = openModal;
+            window.editEntry = editEntry;
+            window.closeModal = closeModal;
+            window.saveEntry = saveEntry;
+            window.deleteEntry = deleteEntry;
+            window.showDetail = showDetail;
+            window.closeDetail = closeDetail;
+            window.exportData = exportData;
+            window.doSyncAll = doSyncAll;
+            window.switchTab = switchTab;
+            window.handleInlineFile = handleInlineFile;
+            window.removeInlineFile = removeInlineFile;
+            window.flushInlineFiles = flushInlineFiles;
+            window.resetInlineFiles = resetInlineFiles;
+            window.viewFile = viewFile;
+            // Expose renderTable dan currentPage setter untuk inline handlers
+            window.renderTable = renderTable;
+            window._resetPageAndRender = function() { currentPage = 1; renderTable(); };
+
+        }); // end DOMContentLoaded
+    </script>
+
+    <script>
+        // ── Fallback global: cegah "is not defined" jika tombol diklik sebelum DOMContentLoaded selesai ──
+        // Fungsi-fungsi ini akan digantikan oleh versi asli setelah DOMContentLoaded
+        var _domReady = false;
+        var _pendingCall = null;
+
+        function _waitAndCall(fn, args) {
+            if (_domReady) return;
+            var guard = setInterval(function() {
+                if (_domReady) {
+                    clearInterval(guard);
+                    if (window[fn]) window[fn].apply(null, args);
+                }
+            }, 50);
+        }
+
+        ['openModal','closeModal','saveEntry','editEntry','deleteEntry',
+         'openUploadModal','closeUploadModal','saveUpload','showDetail',
+         'closeDetail','exportData','doSyncAll','switchTab','viewFile',
+         'handleFile','removeFile','downloadFile','handleInlineFile','removeInlineFile',
+         'renderTable','_resetPageAndRender'
+        ].forEach(function(fn) {
+            if (!window[fn]) {
+                window[fn] = function() {
+                    _waitAndCall(fn, Array.from(arguments));
+                };
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            _domReady = true;
+        });
+    </script>
+
+
+    <!-- UPLOAD DOKUMEN MODAL -->
+    <div class="upload-modal-overlay" id="uploadModal">
+        <div class="upload-modal">
+            <div class="upload-modal-header">
+                <h3 id="uploadModalTitle">Upload Dokumen Kegiatan</h3>
+                <button class="modal-close" onclick="closeUploadModal()">✕</button>
+            </div>
+            <div class="upload-modal-body">
+                <div style="font-size:0.82rem;color:#555;margin-bottom:1.2rem;font-style:italic" id="uploadKegiatan"></div>
+
+                <!-- RENCANA KEGIATAN -->
+                <div class="upload-doc-section type-rencana">
+                    <div class="upload-doc-title">
+                        <span class="file-status-dot empty" id="dot-rencana"></span>Rencana Kegiatan
+                    </div>
+                    <div class="file-drop-zone" id="drop-rencana">
+                        <input type="file" id="file-rencana" accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.png" onchange="handleFile('rencana', this)">
+                        <div class="file-drop-icon">📄</div>
+                        <div class="file-drop-text">Klik atau seret file ke sini</div>
+                        <div class="file-drop-hint">PDF, Word, Excel, JPG, PNG</div>
+                    </div>
+                    <div class="file-preview" id="prev-rencana">
+                        <span>📎</span>
+                        <span class="file-preview-name" id="prevname-rencana"></span>
+                        <button class="btn-file-replace" style="color:#2471a3; border-color:rgba(36,113,163,0.4);" onclick="viewFile('rencana')">Lihat</button>
+                        <button class="btn-file-replace">Ganti<input type="file" accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.png" onchange="handleFile('rencana', this)"></button>
+                        <button class="btn-file-remove" onclick="removeFile('rencana')">Hapus</button>
+                        </div>
+                </div>
+
+                <!-- LAPORAN KEGIATAN -->
+                <div class="upload-doc-section type-laporan">
+                    <div class="upload-doc-title">
+                        <span class="file-status-dot empty" id="dot-laporan"></span>Laporan Kegiatan
+                    </div>
+                    <div class="file-drop-zone" id="drop-laporan">
+                        <input type="file" id="file-laporan" accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.png" onchange="handleFile('laporan', this)">
+                        <div class="file-drop-icon">📋</div>
+                        <div class="file-drop-text">Klik atau seret file ke sini</div>
+                        <div class="file-drop-hint">PDF, Word, Excel, JPG, PNG</div>
+                    </div>
+                    <div class="file-preview" id="prev-laporan">
+                        <span>📎</span>
+                        <span class="file-preview-name" id="prevname-laporan"></span>
+                        <button class="btn-file-replace" style="color:#2471a3; border-color:rgba(36,113,163,0.4);" onclick="viewFile('laporan')">Lihat</button>
+                        <button class="btn-file-replace">Ganti<input type="file" accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.png" onchange="handleFile('laporan', this)"></button>
+                        <button class="btn-file-remove" onclick="removeFile('laporan')">Hapus</button>
+                    </div>
+                </div>
+
+                <!-- PRODUK KEGIATAN -->
+                <div class="upload-doc-section type-produk">
+                    <div class="upload-doc-title">
+                        <span class="file-status-dot empty" id="dot-produk"></span>Produk Kegiatan
+                    </div>
+                    <div class="file-drop-zone" id="drop-produk">
+                        <input type="file" id="file-produk" accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.png" onchange="handleFile('produk', this)">
+                        <div class="file-drop-icon">📝</div>
+                        <div class="file-drop-text">Klik atau seret file ke sini</div>
+                        <div class="file-drop-hint">PDF, Word, Excel, JPG, PNG</div>
+                    </div>
+                    <div class="file-preview" id="prev-produk">
+                        <span>📎</span>
+                        <span class="file-preview-name" id="prevname-produk"></span>
+                        <button class="btn-file-replace" style="color:#2471a3; border-color:rgba(36,113,163,0.4);" onclick="viewFile('produk')">Lihat</button>
+                        <button class="btn-file-replace">Ganti<input type="file" accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.png" onchange="handleFile('produk', this)"></button>
+                        <button class="btn-file-remove" onclick="removeFile('produk')">Hapus</button>
+                    </div>
+                </div>
+
+                <!-- LAPORAN PERTANGGUNGJAWABAN KEUANGAN (WABKU) -->
+                <div class="upload-doc-section type-wabku">
+                    <div class="upload-doc-title">
+                        <span class="file-status-dot empty" id="dot-wabku"></span>Laporan Pertanggungjawaban Keuangan (Wabku)
+                    </div>
+                    <div class="file-drop-zone" id="drop-wabku">
+                        <input type="file" id="file-wabku" accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.png" onchange="handleFile('wabku', this)">
+                        <div class="file-drop-icon">💰</div>
+                        <div class="file-drop-text">Klik atau seret file ke sini</div>
+                        <div class="file-drop-hint">PDF, Word, Excel, JPG, PNG</div>
+                    </div>
+                    <div class="file-preview" id="prev-wabku">
+                        <span>📎</span>
+                        <span class="file-preview-name" id="prevname-wabku"></span>
+                        <button class="btn-file-replace" style="color:#2471a3; border-color:rgba(36,113,163,0.4);" onclick="viewFile('wabku')">Lihat</button>
+                        <button class="btn-file-replace">Ganti<input type="file" accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.png" onchange="handleFile('wabku', this)"></button>
+                        <button class="btn-file-remove" onclick="removeFile('wabku')">Hapus</button>
+                    </div>
+                </div>
+            </div>
+            <div class="upload-modal-footer">
+                <button class="btn btn-secondary" onclick="closeUploadModal()">Tutup</button>
+                <button class="btn btn-primary" onclick="saveUpload()">💾 Simpan Upload</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast" class="toast"></div>
+
+    <footer style="text-align:center;padding:1.2rem 2rem;background:#1a3d1f;border-top:2px solid #c9a84c;color:rgba(255,255,255,0.55);font-family:'Rajdhani',sans-serif;font-size:0.75rem;letter-spacing:2px;position:relative;z-index:10">
+        DEVELOPED BY &nbsp;|&nbsp; <strong style="color:#e8c97a">YULIA SARTIKA</strong> &nbsp;|&nbsp; NIP 199707012025062001
+    </footer>
+</body>
+
+</html>
